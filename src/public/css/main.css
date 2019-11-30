@@ -59,6 +59,11 @@ body {
   color: #4286f4;
 }
 
+.ativo {
+  color: rgb(184, 184, 13);
+  font-weight: bold;
+}
+
 @media screen and (max-width: 992px) {
   body {
     background: #203a43;

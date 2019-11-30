@@ -44,9 +44,15 @@ module.exports = {
     res.redirect("/home");
   },
 
+  postLogout: (req, res, next) => {
+    req.session.isLogged = false;
+    res.redirect("/");
+  },
+
   home: (req, res, next) => {
     res.render("home", {
-      pageTitle: "Enviar"
+      pageTitle: "Enviar",
+      page: 'Inicio'
     });
   },
 
@@ -65,9 +71,22 @@ module.exports = {
 
   resultado: (req, res, next) => {
     res.render("resultado", {
-      pageTitle: "Enviar"
+      pageTitle: "Enviar",
+      page: ''
     });
   },
 
-  sobre: (req, res, next) => {}
+  historico: (req, res, next) => {
+    res.render("resultado", {
+      pageTitle: "Historico de envio",
+      page: 'Historico'
+    });
+  },
+
+  sobre: (req, res, next) => {
+    res.render('sobre', {
+      pageTitle: 'Sobre projeto',
+      page: 'Sobre'
+    })
+  }
 };

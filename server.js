@@ -7,7 +7,8 @@ const session = require("express-session");
 
 const allRoutes = require("./src/routes/all-routes");
 
-const { checkErrors } = require("./errors/errors-log-handler");
+const { generateLogErrors } = require("./errors/errors-log-handler");
+const databaseConnection = require("./config/database-connection");
 
 const app = express();
 
@@ -41,13 +42,18 @@ app.use((req, res, next) => {
 app.use(express.static(join(__dirname, "./src/public")));
 app.use(allRoutes);
 app.use((error, req, res, next) => {
-  let filepath = join(__dirname, "/logs/errors");
-  checkErrors(error, filepath, error.statusCode);
+  let filepath = join(__dirname, "/logs/errors.log");
+  generateLogErrors(error, filepath, error.statusCode);
   res.render("error", {
-    pageTitle: "Error de servidor"
+    pageTitle: "Error"
   });
 });
 
-app.listen(3000, () => {
-  console.log(`APP running on PORT: ${3000}`);
-});
+try {
+  app.listen(3000, () => {
+    console.log(`APP running on PORT: ${3000}`);
+  });
+} catch (error) {
+  console.log("****> Database connection error. Application will not start.\n");
+  console.log(error);
+}

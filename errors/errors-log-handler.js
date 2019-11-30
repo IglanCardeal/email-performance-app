@@ -4,7 +4,7 @@ const fs = require("fs");
 const { format, transports } = winston;
 
 // Tratamento para gerar arquivos de logs de erros nao tratados.
-exports.checkErrors = (error, filepath, status = 500) => {
+exports.generateLogErrors = (error, filepath, status = 500) => {
   const logConfiguration = {
     format: format.combine(format.simple()),
     transports: [
