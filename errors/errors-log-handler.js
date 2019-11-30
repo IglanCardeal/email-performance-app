@@ -4,7 +4,7 @@ const fs = require("fs");
 const { format, transports } = winston;
 
 // Tratamento para gerar arquivos de logs de erros nao tratados.
-exports.unhandledException = (error, filepath, exception) => {
+exports.checkErrors = (error, filepath, status = 500) => {
   const logConfiguration = {
     format: format.combine(format.simple()),
     transports: [
@@ -23,9 +23,8 @@ exports.unhandledException = (error, filepath, exception) => {
     `\n================================= BEGIN =============================================`
   );
   logger.info(`Date: ${new Date().toISOString()}`);
-  logger.error("Type of: " + exception, "\n");
+  logger.error("Status: " + status, "\n");
   logger.error("message", error, "\n");
-  logger.error("origin", origin, "\n");
   logger.info(
     `\n================================== END ==============================================\n`
   );

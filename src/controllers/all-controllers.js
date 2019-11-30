@@ -67,5 +67,7 @@ module.exports = {
     res.render("resultado", {
       pageTitle: "Enviar"
     });
-  }
+  },
+
+  sobre: (req, res, next) => {}
 };

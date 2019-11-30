@@ -7,7 +7,7 @@ const session = require("express-session");
 
 const allRoutes = require("./src/routes/all-routes");
 
-const { unhandledException } = require("./errors/errors-log-handler");
+const { checkErrors } = require("./errors/errors-log-handler");
 
 const app = express();
 
@@ -40,15 +40,12 @@ app.use((req, res, next) => {
 
 app.use(express.static(join(__dirname, "./src/public")));
 app.use(allRoutes);
-
-process.on("uncaughtException", error => {
-  const filepath = path.join(__dirname, "/logs/uncaught-exception-errors.log");
-  unhandledException(error, filepath, "uncaughtException");
-});
-
-process.on("unhandledRejection", error => {
-  const filepath = path.join(__dirname, "/logs/unhandled-rejection-errors.log");
-  unhandledException(error, filepath, "unhandledRejection");
+app.use((error, req, res, next) => {
+  let filepath = join(__dirname, "/logs/errors");
+  checkErrors(error, filepath, error.statusCode);
+  res.render("error", {
+    pageTitle: "Error de servidor"
+  });
 });
 
 app.listen(3000, () => {
