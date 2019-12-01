@@ -14,13 +14,16 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-          <div class="navbar-nav ml-auto p-3">
-            <a href="#" class="nav-item nav-link text-white">Sobre</a>
+          <div class="navbar-nav ml-auto">
+            <a href="/sobre" class="nav-item nav-link text-white">Sobre</a>
           </div>
         </div>
       </nav>
 
       <div class="login-form text-white">
+        <h3 class="text-danger text-center py-3">
+          <%= error %>
+        </h3>
         <form
           action="/login"
           method="POST"

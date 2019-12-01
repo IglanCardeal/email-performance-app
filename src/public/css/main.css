@@ -4,10 +4,11 @@
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
-  font-size: 1rem;
 }
 
 body {
+  font-family: "Solway", serif;
+  font-size: 1.3rem;
   background: #0f2027; /* fallback for old browsers */
   background: -webkit-radial-gradient(
     circle,
@@ -49,7 +50,6 @@ body {
 }
 
 .desenvolvedor {
-  letter-spacing: 0.2rem;
   color: white;
   transition: 0.3s ease-in-out;
 }
@@ -60,12 +60,64 @@ body {
 }
 
 .ativo {
-  color: rgb(184, 184, 13);
+  color: rgb(255, 255, 78) !important;
+  font-size: 1.2rem;
   font-weight: bold;
+}
+
+.logout {
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  cursor: pointer;
+}
+
+footer {
+  transform: translateY(40%);
+}
+
+.email-img {
+  -webkit-animation: FADE_IMAGEM 3s alternate infinite; 
+  -moz-animation: FADE_IMAGEM 3s alternate infinite; 
+  -o-animation: FADE_IMAGEM 3s alternate infinite; 
+  animation: FADE_IMAGEM 3s alternate infinite; 
+}
+
+@-webkit-keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @media screen and (max-width: 992px) {
   body {
+    font-size: 0.8rem;
     background: #203a43;
     background-color: #203a43;
   }

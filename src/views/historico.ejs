@@ -5,8 +5,27 @@
   <div id="main-div" class="container col-12 col-sm-10 col-md-8 col-lg-4">
     <%- include('./includes/nav.ejs') %>
     
-    <h1>Historico de envio</h1>
+    <div class="text-center text-white py-5">
+      <h1>Historico de envio</h1>
+      <ol class="px-3">
+        <% historico.forEach(h => { %>
+          <li class="p-3">
+            Data envio: <%= h.data %> <br>
+            Destino: <%= h.destino %> <br>
+            <% if (h.state === 'success') { %>
+              Status: <span class="text-success"><%= h.status %></span> <br>
+            <% } %>
+            <% if (h.state === 'waiting') { %>
+              Status: <span class="text-warning"><%= h.status %></span> <br>
+            <% } %>
+            <% if (h.state === 'failed') { %>
+              Status: <span class="text-danger"><%= h.status %></span> <br>
+            <% } %>
+          </li>
+        <% }); %>
+      </ol>
+    </div>
 
-  </div>
+  </div> 
 
-    <%- include('./includes/footer.ejs') %>
+  <%- include('./includes/footer.ejs') %>

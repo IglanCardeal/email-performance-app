@@ -43,9 +43,12 @@ app.use(express.static(join(__dirname, "./src/public")));
 app.use(allRoutes);
 app.use((error, req, res, next) => {
   let filepath = join(__dirname, "/logs/errors.log");
-  generateLogErrors(error, filepath, error.statusCode);
+  // generateLogErrors(error, filepath, error.statusCode);
+  console.error(error);
   res.render("error", {
-    pageTitle: "Error"
+    pageTitle: "Error",
+    path: "",
+    isLogged: req.session.isLogged
   });
 });
 

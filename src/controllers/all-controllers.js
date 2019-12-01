@@ -31,14 +31,28 @@ const transport = nodemailer.createTransport(
 module.exports = {
   login: (req, res, next) => {
     res.render("login", {
-      pageTitle: "Login"
+      pageTitle: "Login",
+      isLogged: req.session.isLogged,
+      error: ""
     });
   },
 
   postLogin: (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("login", {
+        pageTitle: "Login",
+        isLogged: req.session.isLogged,
+        error: errors.array()[0].msg
+      });
+    }
     const { user, password } = req.body;
     if (!(user === "admin" && password === "123")) {
-      res.json({ message: "nome de usuario ou senha incorretos!" });
+      return res.render("login", {
+        pageTitle: "Login",
+        isLogged: req.session.isLogged,
+        error: "Nome de usuario ou senha incorretos! Tente novamente."
+      });
     }
     req.session.isLogged = true;
     res.redirect("/home");
@@ -52,41 +66,98 @@ module.exports = {
   home: (req, res, next) => {
     res.render("home", {
       pageTitle: "Enviar",
-      page: 'Inicio'
+      path: "inicio",
+      isLogged: req.session.isLogged,
+      error: null
     });
   },
 
   postSendEmail: (req, res, next) => {
     const { destiny, message } = req.body;
-    console.log(destiny, message, process.env.APP_EMAIL);
-    transport.sendMail({
-      // to: email,
-      to: "cubeleexuzz@gmail.com", // email de teste
-      from: process.env.APP_EMAIL,
-      subject: "Email de teste do projetod de redes II",
-      html: htmlBodyEmail()
-    });
-    res.redirect("resultado");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("home", {
+        pageTitle: "Login",
+        isLogged: req.session.isLogged,
+        error: errors.array()[0].msg,
+        path: "inicio"
+      });
+    }
+    try {
+      transport.sendMail({
+        // to: email,
+        to: "cubeleexuzz@gmail.com", // email de teste
+        from: process.env.APP_EMAIL,
+        subject: "Email de teste do projetod de redes II",
+        html: htmlBodyEmail()
+      });
+      res.redirect("resultado");
+    } catch (error) {
+      next(error);
+    }
   },
 
   resultado: (req, res, next) => {
     res.render("resultado", {
       pageTitle: "Enviar",
-      page: ''
+      path: "",
+      isLogged: req.session.isLogged
     });
   },
 
   historico: (req, res, next) => {
-    res.render("resultado", {
-      pageTitle: "Historico de envio",
-      page: 'Historico'
-    });
+    try {
+      // Salvar no data no banco como string no formato: dia/mes/ano as hora;
+      const dataAtualFormatada = () => {
+        let data = new Date(),
+          dia = data.getDate().toString(),
+          diaF = dia.length == 1 ? "0" + dia : dia,
+          mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+          mesF = mes.length == 1 ? "0" + mes : mes,
+          anoF = data.getFullYear(),
+          hora = data.getHours(),
+          min =
+            data.getMinutes().toString().length == 1
+              ? "0" + data.getMinutes().toString()
+              : data.getMinutes().toString();
+        return `${diaF}/${mesF}/${anoF} as ${hora}:${min} `;
+      };
+      let historico = [
+        {
+          data: dataAtualFormatada(),
+          destino: "cubeleexuzz@gmail.com",
+          state: "success",
+          status: "Email enviado"
+        },
+        {
+          data: dataAtualFormatada(),
+          destino: "velpac-sgs@gmail.com",
+          state: "waiting",
+          status: "Email pendente"
+        },
+        {
+          data: dataAtualFormatada(),
+          destino: "velpac-sgs@gmail.com",
+          state: "failed",
+          status: "Erro ao enviar. Verifique email de origem e tente novamente"
+        }
+      ];
+      res.render("historico", {
+        pageTitle: "Historico de envio",
+        historico: historico,
+        path: "historico",
+        isLogged: req.session.isLogged
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
   sobre: (req, res, next) => {
-    res.render('sobre', {
-      pageTitle: 'Sobre projeto',
-      page: 'Sobre'
-    })
+    res.render("sobre", {
+      pageTitle: "Sobre projeto",
+      path: "sobre",
+      isLogged: req.session.isLogged
+    });
   }
 };

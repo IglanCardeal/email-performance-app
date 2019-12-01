@@ -1,5 +1,10 @@
 <nav class=" navbar navbar-expand-lg navbar-dark">
-  <p class="navbar-brand">Projeto Redes II</p>
+  <p class="navbar-brand">
+    <span class="email-img">
+      <img src="img/email2.png" alt="email-img">
+    </span>
+    Projeto Redes II
+  </p>
   <button
     type="button"
     class="navbar-toggler"
@@ -10,13 +15,19 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <div class="navbar-nav ml-auto">
-      <a href="/home" class="p-3 nav-item nav-link text-white <%= page === Inicio ? ativo :  %>">Inicio</a>
-      <a href="/historico" class="p-3 nav-item nav-link text-white <%= page === Historico ? ativo :  %>">Historico</a>
-      <a href="/sobre" class="p-3 nav-item nav-link text-white <%= page === Sobre ? ativo :  %>">Sobre</a>
-      <form action="/logout" method="POST">
-        <%- include('./_csrf.ejs') %>
-        <button class="p-3 nav-item nav-link text-white">Logout</button>
-      </form>
+      <% if (isLogged) { %>
+        <a href="/home" class="p-3 nav-item nav-link text-white <%= path === 'inicio' ? 'ativo' : '' %>">Inicio</a>
+        <a href="/historico" class="p-3 nav-item nav-link text-white <%= path === 'historico' ? 'ativo' : '' %>">Historico</a>
+      <% } %>
+      
+      <a href="/sobre" class="p-3 nav-item nav-link text-white <%= path === 'sobre' ? 'ativo' : '' %>">Sobre</a>
+
+      <% if (isLogged) { %>
+        <form action="/logout" method="POST">
+          <%- include('./_csrf.ejs') %>
+          <button class="logout p-3 nav-item nav-link text-white">Logout</button>
+        </form>
+      <% } %>
     </div>
   </div>
 </nav>

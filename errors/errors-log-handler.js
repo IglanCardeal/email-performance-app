@@ -24,7 +24,7 @@ exports.generateLogErrors = (error, filepath, status = 500) => {
   );
   logger.info(`Date: ${new Date().toISOString()}`);
   logger.error("Status: " + status, "\n");
-  logger.error("message", error, "\n");
+  logger.error("Error: ", error, "\n");
   logger.info(
     `\n================================== END ==============================================\n`
   );

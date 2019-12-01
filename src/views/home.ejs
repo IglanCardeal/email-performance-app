@@ -10,6 +10,9 @@
         <h2 class="text-center">
           Enviar email
         </h2>
+        <h3 class="text-danger text-center py-3">
+          <%= error %>
+        </h3>
         <form
           action="/sendemail"
           method="POST"
@@ -37,12 +40,7 @@
             >
             </textarea>
           </div>
-          <input
-            type="hidden"
-            name="_csrf"
-            data="token"
-            value="<%=csrfToken%>"
-          />
+          <%- include('./includes/_csrf.ejs') %>
           <button type="submit" class="btn btn-primary btn-entrar">
             Enviar
           </button>
