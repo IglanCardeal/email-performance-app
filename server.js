@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const csurf = require("csurf");
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 const allRoutes = require("./src/routes/all-routes");
 
@@ -12,12 +13,20 @@ const databaseConnection = require("./config/database-connection");
 
 const app = express();
 
+const uri = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+
+const store = new MongoDBStore({
+  uri: uri,
+  collection: "sessoes"
+});
+
 app.set("view engine", "ejs");
 app.set("views", join(__dirname, "./src/views"));
 
 const sessionObject = {
+  name: "projeto_redes2.sid",
   secret: ["78jfduu923bs1qpoiewa10xssd000212Wssadl9112"],
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   cookie: {
     path: "/",
@@ -25,7 +34,8 @@ const sessionObject = {
     maxAge: 3600000,
     httpOnly: true,
     sameSite: true
-  }
+  },
+  store: store
 };
 
 app.use(helmet());
@@ -43,7 +53,7 @@ app.use(express.static(join(__dirname, "./src/public")));
 app.use(allRoutes);
 app.use((error, req, res, next) => {
   let filepath = join(__dirname, "/logs/errors.log");
-  // generateLogErrors(error, filepath, error.statusCode);
+  generateLogErrors(error, filepath, error.statusCode);
   console.error(error);
   res.render("error", {
     pageTitle: "Error",
@@ -53,10 +63,13 @@ app.use((error, req, res, next) => {
 });
 
 try {
-  app.listen(3000, () => {
-    console.log(`APP running on PORT: ${3000}`);
+  databaseConnection(() => {
+    app.listen(process.env.PORT, () => {
+      console.log(`APP running on PORT: ${process.env.PORT}`);
+      console.log(`Ambiente de execucao: ${process.env.NODE_ENV}`);
+    });
   });
 } catch (error) {
   console.log("****> Database connection error. Application will not start.\n");
-  console.log(error);
+  console.error(error);
 }

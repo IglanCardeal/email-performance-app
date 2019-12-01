@@ -1,5 +1,5 @@
 const winston = require("winston");
-const fs = require("fs");
+const fs = Promise.promisifyAll(require("fs"));
 
 const { format, transports } = winston;
 

@@ -2,28 +2,45 @@
 
 </head>
 <body>
-  <div id="main-div" class="container col-12 col-sm-10 col-md-8 col-lg-4">
+    <div id="main-div" class="container col-12 col-sm-10 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
     <%- include('./includes/nav.ejs') %>
     
     <div class="text-center text-white py-5">
       <h1>Historico de envio</h1>
-      <ol class="px-3">
-        <% historico.forEach(h => { %>
-          <li class="p-3">
-            Data envio: <%= h.data %> <br>
-            Destino: <%= h.destino %> <br>
-            <% if (h.state === 'success') { %>
-              Status: <span class="text-success"><%= h.status %></span> <br>
-            <% } %>
-            <% if (h.state === 'waiting') { %>
-              Status: <span class="text-warning"><%= h.status %></span> <br>
-            <% } %>
-            <% if (h.state === 'failed') { %>
-              Status: <span class="text-danger"><%= h.status %></span> <br>
-            <% } %>
-          </li>
-        <% }); %>
-      </ol>
+      <% if (historico.length < 1) { %>
+        <h3 class="p-3 text-info">
+          Nenhum email enviado no momento!
+        </h3>
+      <% } else { %>
+        <ol class="px-3">
+          <% historico.forEach(h => { %>
+            <li class="p-3">
+              Data envio: <%= h.data %> <br>
+              Destino: <%= h.destino %> <br>
+              Protocolo: <span class="text-info"><%= h.protocol %></span> <br>
+              <% if (h.state === 'success') { %>
+                Status: <span class="text-success">Enviado</span> <br>
+              <% } %>
+              <% if (h.state === 'waiting') { %>
+                Status: <span class="text-warning">Pendente</span> <br>
+              <% } %>
+              <% if (h.state === 'failed') { %>
+                Status: <span class="text-danger">Falha ao enviar</span> <br>
+              <% } %>
+              Tempo decorrido: <%= h.time %> milisegundos
+            </li>
+          <% }); %>
+        </ol>
+        <div class="py-3 border border-primary">
+          <h4 class="p-2 text-success">Resultado de desempenho para cada protocolo</h4>
+          <p class="p-3">
+            Tempo medio de envio pelo SMTP: <span class="text-warning"><%= tempoMedioSmtp %> milisegundos</span>
+          </p>
+          <p class="p-3">
+            Tempo medio de envio pelo HTTP: <span class="text-warning"><%= tempoMedioHttp %> milisegundos</span>
+          </p>
+        </div>
+      <% } %>
     </div>
 
   </div> 

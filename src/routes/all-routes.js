@@ -4,6 +4,13 @@ const loginController = require("../controllers/all-controllers");
 
 const router = express.Router();
 
+const checkSession = (req, res, next) => {
+  if (!req.session.isLogged) {
+    return res.redirect("/");
+  }
+  return next();
+};
+
 router.get("/", loginController.login);
 
 router.get("/sobre", loginController.sobre);
@@ -16,23 +23,17 @@ router.post(
       "Seu nome de usuario deve conter somente caracteres alfanumericos!"
     )
       .isAlpha()
-      .trim()
+      .trim(),
+    body("password", "Senha deve ter no minimo 6 caracteres!").isLength({
+      min: 6
+    })
   ],
   loginController.postLogin
 );
 
 router.post("/logout", loginController.postLogout);
 
-router.get(
-  "/home",
-  (req, res, next) => {
-    if (req.session.isLogged) {
-      return next();
-    }
-    res.redirect("/");
-  },
-  loginController.home
-);
+router.get("/home", checkSession, loginController.home);
 
 router.post(
   "/sendemail",
@@ -40,116 +41,18 @@ router.post(
     body("destiny", "Formato de email informado invalido. Tente novamente.")
       .isEmail()
       .normalizeEmail(),
-    body("message", "Escreva algo para enviar no corpo de email.")
-      .isEmpty()
-      .trim()
+    body("message", "Escreva algo para enviar no corpo de email.").isLength({
+      min: 1
+    })
   ],
-  (req, res, next) => {
-    if (req.session.isLogged) {
-      return next();
-    }
-    res.redirect("/");
-  },
+  checkSession,
   loginController.postSendEmail
 );
 
-router.get(
-  "/resultado",
-  (req, res, next) => {
-    if (req.session.isLogged) {
-      return next();
-    }
-    res.redirect("/");
-  },
-  loginController.resultado
-);
+router.get("/resultado", checkSession, loginController.resultado);
 
-router.get(
-  "/historico",
-  (req, res, next) => {
-    if (req.session.isLogged) {
-      return next();
-    }
-    res.redirect("/");
-  },
-  loginController.historico
-);
+router.get("/historico", checkSession, loginController.historico);
+
+router.get("/stress", loginController.testeStress);
 
 module.exports = router;
-
-/*
-exports.loginValidator = body => [
-  body("email", "Invalid email format! Try again.")
-    .isEmail()
-    .normalizeEmail(),
-  body("password", "Invalid password format! Try again.")
-    .isAlphanumeric()
-    .trim()
-    .isLength({ min: 3, max: 25 }),
-  body("keep").custom((value, { req }) => {
-    const valid = Boolean(value === "yes" || value === undefined);
-    if (!valid) {
-      throw new Error("Invalid value for keep connected!");
-    }
-    return true;
-  })
-];
-
-exports.resetPassValidator = body => [
-  body(
-    "password",
-    "Invalid password format! Use only alphanumerics characters and at least 3 and maximum 25 characters password."
-  )
-    .isAlphanumeric()
-    .trim()
-    .isLength({ min: 3, max: 25 }),
-  body("confirmPassword")
-    .trim()
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("The passwords are not equal! Try again.");
-      }
-      return true;
-    }),
-  body("userId", "Invalid ID!")
-    .isAlphanumeric()
-    .isEmpty(),
-  body("token", "Invalid token!")
-    .isAlphanumeric()
-    .isEmpty()
-];
-
-exports.signupValidator = (check, body) => [
-  check(
-    "username",
-    "Your name account must have only alphabetic characters! Try again."
-  )
-    .isAlpha()
-    .trim(),
-  check("email", "Not valid email! Try again.")
-    .isEmail()
-    .normalizeEmail()
-    .custom((value, { req }) => {
-      if (value === process.env.APP_EMAIL) {
-        throw new Error("This email address is not allowed!");
-      }
-      return true;
-    }),
-  body(
-    "password",
-    "Invalid password format! Use only alphanumerics characters and at least 3 and maximum 25 characters password."
-  )
-    .isAlphanumeric()
-    .trim()
-    .isLength({ min: 3, max: 25 }),
-  body("confirmPassword")
-    .trim()
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("The passwords are not equal! Try again.");
-      }
-      return true;
-    })
-];
-
-*/

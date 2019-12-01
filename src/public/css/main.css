@@ -34,6 +34,10 @@ body {
   -o-background-size: cover;
 }
 
+footer {
+  transform: translateY(40%);
+}
+
 .login-form {
   margin-top: 25vh;
 }
@@ -65,21 +69,17 @@ body {
   font-weight: bold;
 }
 
-.logout {
+.logout-btn {
   border: none;
   background: rgba(0, 0, 0, 0);
   cursor: pointer;
 }
 
-footer {
-  transform: translateY(40%);
-}
-
 .email-img {
-  -webkit-animation: FADE_IMAGEM 3s alternate infinite; 
-  -moz-animation: FADE_IMAGEM 3s alternate infinite; 
-  -o-animation: FADE_IMAGEM 3s alternate infinite; 
-  animation: FADE_IMAGEM 3s alternate infinite; 
+  -webkit-animation: FADE_IMAGEM 3s alternate infinite;
+  -moz-animation: FADE_IMAGEM 3s alternate infinite;
+  -o-animation: FADE_IMAGEM 3s alternate infinite;
+  animation: FADE_IMAGEM 3s alternate infinite;
 }
 
 @-webkit-keyframes FADE_IMAGEM {
