@@ -33,16 +33,44 @@
         </ol>
         <div class="py-3 border border-primary">
           <h4 class="p-2 text-success">Resultado de desempenho para cada protocolo</h4>
-          <p class="p-3">
-            Tempo medio de envio pelo SMTP: <span class="text-warning"><%= tempoMedioSmtp %> milisegundos</span>
+          <p class="p-1">
+            Tempo médio de envio pelo SMTP: <span class="text-warning"><%= tempoMedioSmtp %> milisegundos</span>
           </p>
-          <p class="p-3">
-            Tempo medio de envio pelo HTTP: <span class="text-warning"><%= tempoMedioHttp %> milisegundos</span>
+          <p class="p-1">
+            Tempo médio de envio pelo HTTP: <span class="text-warning"><%= tempoMedioHttp %> milisegundos</span>
           </p>
         </div>
       <% } %>
     </div>
 
+    <% if (historico.length > 0) { %>
+      <div id="chart" class="bg-white"></div>
+      <script>
+        var chart = c3.generate({
+          bindto: '#chart',
+          data: {
+            columns: [
+              ['SMTP', <%= arrayOfTimeSmtp  %>],
+              ['HTTP', <%= arrayOfTimeHttp %>]
+            ],
+            axes: {
+              data2: 'y2'
+            },
+            types: {
+              data2: 'bar' // ADD
+            }
+          },
+          axis: {
+            y: {
+              label: {
+                text: 'Tempo em milisegundos',
+                position: 'outer-middle'
+              }
+            }
+          }
+        });
+      </script>
+    <% } %>
   </div> 
 
   <%- include('./includes/footer.ejs') %>

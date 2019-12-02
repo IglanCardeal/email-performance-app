@@ -67,7 +67,7 @@ module.exports = {
     }
     const { user, password } = req.body;
     try {
-      const hasAdmin = await User.findOne({ user: "admin" })
+      const hasAdmin = await User.findOne({ user: user.toLowerCase() })
         .select("+password")
         .exec();
       if (!hasAdmin) {
@@ -86,7 +86,7 @@ module.exports = {
         return res.render("login", {
           pageTitle: "Login",
           isLogged: req.session.isLogged,
-          error: "Nome de usuario ou senha incorretos! Tente novamente."
+          error: "Nome de usuário ou senha incorretos! Tente novamente."
         });
       }
       req.session.isLogged = true;
@@ -212,6 +212,16 @@ module.exports = {
   historico: async (req, res, next) => {
     try {
       const historico = await Historic.find().exec();
+      const arrayOfTimeHttp = historico
+        .filter(h => {
+          return h.protocol === "HTTP" && h.state === "success";
+        })
+        .map(h => h.time);
+      const arrayOfTimeSmtp = historico
+        .filter(h => {
+          return h.protocol === "SMTP" && h.state === "success";
+        })
+        .map(h => h.time);
       const smtp = historico.filter(h => {
         return h.protocol === "SMTP" && h.state === "success";
       });
@@ -244,7 +254,9 @@ module.exports = {
         path: "historico",
         isLogged: req.session.isLogged,
         tempoMedioHttp,
-        tempoMedioSmtp
+        tempoMedioSmtp,
+        arrayOfTimeHttp,
+        arrayOfTimeSmtp
       });
     } catch (error) {
       next(error);

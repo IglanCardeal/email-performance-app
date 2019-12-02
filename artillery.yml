@@ -2,10 +2,7 @@ config:
   target: "http://localhost:3000"
   phases:
     - duration: 10
-      arrivalRate: 20
-  defaults:
-    headers:
-      content-type: "application/json"
+      arrivalRate: 200
 scenarios:
   - name: "Chamada para o banco para exibir historico de emails"
     flow:
