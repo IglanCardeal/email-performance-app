@@ -273,7 +273,12 @@ module.exports = {
 
   testeStress: async (req, res) => {
     try {
-      let historic = await Historic.find();
+      // let historic =  await Historic.find();
+      let historic = 0;
+      while (historic < 1000000) {
+        Math.random();
+        historic++
+      }
       res.status(200).json({ message: "Fim teste de estresse!", historic });
     } catch (error) {
       res.status(500).json({ message: "Teste de estresse falhou!" });
