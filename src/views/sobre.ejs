@@ -16,12 +16,12 @@
         análise de performance de cada protocolo durante o envio. Oferece o resultado de tempo médio de envio para cada protocolo e por fim, com base em todos os emails enviados, exibe 
         gráfico para se ter uma comparação geral da performance.
       </p>
-      <div class="m-3"><img  style="box-shadow: 0 2px 5px black;" src="/img/grafico-comparacao.png" alt="grafico-comparacao"></div >
+      <div class="py-5"><img class="img-fluid"  style="box-shadow: 0 2px 5px black;" src="/img/grafico-comparacao.png" alt="grafico-comparacao"></div>
       <p class="text-justify">
         Este site foi feito com as tecnologias: MongoDB, NodeJS e, principalmente, faz o uso da API <a href="http://sendgrid.com" style="text-decoration: none;" target="_blank" rel="noopener noreferrer">SendGrid</a> para envio de emails
         sob os protocolos HTTP e SMTP. Os emails submetidos pelo usuário, são enviados ao servidor NodeJS e este armazena dados do email como protocolo, data de envio e protocolo usado, no banco de dados MongoDB antes de os enviar através da API do SendGrid. <br>
       </p>
-      <div class="m-3"><img  style="box-shadow: 0 2px 5px black;" src="/img/esquema.png" alt="esquema-funcionamento"></div >
+      <div class="py-5"><img class="img-fluid"  style="box-shadow: 0 2px 5px black;" src="/img/esquema.png" alt="esquema-funcionamento"></div>
       <p class="text-justify">
         Os emails salvos, possuem um atributo que determina o estado do email submetido. Apenas os email com o estado 'enviado' são usados no cálculo que determina o tempo médio de envio de cada protocolo. Os estados são:  <br>
         <ol>
@@ -36,7 +36,7 @@
           </li>
         </ol>
       </p>
-      <div class="m-3"><img  style="box-shadow: 0 2px 5px black;" src="/img/historico.png" alt="grafico-comparacao"></div >
+      <div class="py-5"><img class="img-fluid"  style="box-shadow: 0 2px 5px black;" src="/img/historico.png" alt="grafico-comparacao"></div>
       <p class="text-justify">
         Dúvidas, reportar um bug ou deseja analisar o código fonte? Enviar o email (pode usar esse mesmo site &#128526;) para o desenvolvedor do site. Manda seu email para <em>cmtcardeal@outlook.com</em>. O código fonte da aplicação estará disponível <a href="https://github.com/IglanCardeal/app-envio-email" target="_blank" style="text-decoration: none;">neste link do github</a>.
       </p>
