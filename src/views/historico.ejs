@@ -1,0 +1,77 @@
+<%- include('./includes/head.ejs') %>
+
+</head>
+<body>
+    <div id="main-div" class="container col-12 col-sm-10 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+    <%- include('./includes/nav.ejs') %>
+    
+    <div class="text-center text-white py-5">
+      <h1>Historico de envio</h1>
+      <% if (historico.length < 1) { %>
+        <h3 class="p-3 text-info">
+          Nenhum email enviado no momento!
+        </h3>
+      <% } else { %>
+        <ol class="px-3">
+          <% historico.forEach(h => { %>
+            <li class="p-3">
+              Data envio: <%= h.data %> <br>
+              Destino: <%= h.destino %> <br>
+              Protocolo: <span class="text-info"><%= h.protocol %></span> <br>
+              <% if (h.state === 'success') { %>
+                Status: <span class="text-success">Enviado</span> <br>
+              <% } %>
+              <% if (h.state === 'waiting') { %>
+                Status: <span class="text-warning">Pendente</span> <br>
+              <% } %>
+              <% if (h.state === 'failed') { %>
+                Status: <span class="text-danger">Falha ao enviar</span> <br>
+              <% } %>
+              Tempo decorrido: <%= h.time %> milisegundos
+            </li>
+          <% }); %>
+        </ol>
+        <div class="py-3 border border-primary">
+          <h4 class="p-2 text-success">Resultado de desempenho para cada protocolo</h4>
+          <p class="p-1">
+            Tempo médio de envio pelo SMTP: <span class="text-warning"><%= tempoMedioSmtp %> milisegundos</span>
+          </p>
+          <p class="p-1">
+            Tempo médio de envio pelo HTTP: <span class="text-warning"><%= tempoMedioHttp %> milisegundos</span>
+          </p>
+        </div>
+      <% } %>
+    </div>
+
+    <% if (historico.length > 0) { %>
+      <h3 class="text-center text-white">Gráfico</h3>
+      <div id="chart" class="bg-white"></div>
+      <script>
+        var chart = c3.generate({
+          bindto: '#chart',
+          data: {
+            columns: [
+              ['SMTP', <%= arrayOfTimeSmtp  %>],
+              ['HTTP', <%= arrayOfTimeHttp %>]
+            ],
+            axes: {
+              data2: 'y2'
+            },
+            types: {
+              data2: 'bar' // ADD
+            }
+          },
+          axis: {
+            y: {
+              label: {
+                text: 'Tempo em milisegundos',
+                position: 'outer-middle'
+              }
+            }
+          }
+        });
+      </script>
+    <% } %>
+  </div> 
+
+  <%- include('./includes/footer.ejs') %>

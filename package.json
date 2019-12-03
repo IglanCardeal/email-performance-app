@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.2.0",
+    "csurf": "^1.10.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.2.0",
+    "helmet": "^3.21.2",
+    "mongoose": "^5.7.12",
+    "nodemailer": "^6.3.1",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "winston": "^3.2.1"
+  },
+  "scripts": {
+    "production": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=development nodemon server.js"
+  },
+  "name": "app-envio-emails",
+  "version": "0.1",
+  "description": "Site para envio de e-mails usando API SendGrid.",
+  "main": "app.js",
+  "author": "Iglan Cardeal <cmtcardeal@outlook.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}

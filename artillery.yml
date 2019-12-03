@@ -1,0 +1,10 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 10
+      arrivalRate: 200
+scenarios:
+  - name: "Chamada para o banco para exibir historico de emails"
+    flow:
+      - get:
+          url: "/stress"

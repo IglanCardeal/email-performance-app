@@ -1,0 +1,124 @@
+*,
+*::after,
+*::before {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Solway", serif;
+  font-size: 1.3rem;
+  background: #0f2027; /* fallback for old browsers */
+  background: -webkit-radial-gradient(
+    circle,
+    #2c5364,
+    #203a43,
+    #0f2027
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: radial-gradient(
+    circle,
+    #2c5364,
+    #203a43,
+    #0f2027
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-position: center;
+  background-position-y: 0px;
+  background-origin: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  backface-visibility: hidden;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+}
+
+footer {
+  transform: translateY(40%);
+}
+
+.login-form {
+  margin-top: 25vh;
+}
+
+.btn-entrar {
+  background-color: #2c5364;
+  border: none;
+  padding: 15px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-entrar:hover {
+  background-color: #3a6c81;
+}
+
+.desenvolvedor {
+  color: white;
+  transition: 0.3s ease-in-out;
+}
+
+.desenvolvedor:hover {
+  text-decoration: none;
+  color: #4286f4;
+}
+
+.ativo {
+  color: rgb(255, 255, 78) !important;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.logout-btn {
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  cursor: pointer;
+}
+
+.email-img {
+  -webkit-animation: FADE_IMAGEM 3s alternate infinite;
+  -moz-animation: FADE_IMAGEM 3s alternate infinite;
+  -o-animation: FADE_IMAGEM 3s alternate infinite;
+  animation: FADE_IMAGEM 3s alternate infinite;
+}
+
+@-webkit-keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes FADE_IMAGEM {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  body {
+    font-size: 0.8rem;
+    background: #203a43;
+    background-color: #203a43;
+  }
+}

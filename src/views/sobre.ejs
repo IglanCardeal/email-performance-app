@@ -1,0 +1,50 @@
+<%- include('./includes/head.ejs') %>
+
+</head>
+<body>
+    <div id="main-div" class="container col-12 col-sm-10 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+    
+    <%- include('./includes/nav.ejs') %>
+
+    <div class="login-form text-white text-center mt-5">
+      <h2>
+        Sobre o projeto
+      </h2>
+      <p class="text-justify">
+        Este projeto consiste de uma aplicação web para envio de email baseando em protocolos de comunicação HTTP e SMTP.
+        Além de pode escolher qual protocolo deseja enviar o email, este app possui um contador de tempo (em milisegundos) para que possa ser feita a 
+        análise de performance de cada protocolo durante o envio. Oferece o resultado de tempo médio de envio para cada protocolo e por fim, com base em todos os emails enviados, exibe 
+        gráfico para se ter uma comparação geral da performance.
+      </p>
+      <div class="m-3"><img  style="box-shadow: 0 2px 5px black;" src="/img/grafico-comparacao.png" alt="grafico-comparacao"></div >
+      <p class="text-justify">
+        Este site foi feito com as tecnologias: MongoDB, NodeJS e, principalmente, faz o uso da API <a href="http://sendgrid.com" style="text-decoration: none;" target="_blank" rel="noopener noreferrer">SendGrid</a> para envio de emails
+        sob os protocolos HTTP e SMTP. Os emails submetidos pelo usuário, são enviados ao servidor NodeJS e este armazena dados do email como protocolo, data de envio e protocolo usado, no banco de dados MongoDB antes de os enviar através da API do SendGrid. <br>
+      </p>
+      <div class="m-3"><img  style="box-shadow: 0 2px 5px black;" src="/img/esquema.png" alt="esquema-funcionamento"></div >
+      <p class="text-justify">
+        Os emails salvos, possuem um atributo que determina o estado do email submetido. Apenas os email com o estado 'enviado' são usados no cálculo que determina o tempo médio de envio de cada protocolo. Os estados são:  <br>
+        <ol>
+          <li>
+            enviado, onde a API validou os dados recebidos e realizou o envio para o email de destino;
+          </li>
+          <li>
+            pendente, onde ainda não foi confirmado o envio do email pela API;
+          </li>  
+          <li>
+            falha, onde não foi possível enviar devido: falha de conexão, chave de API inválida, serviço fora do ar.
+          </li>
+        </ol>
+      </p>
+      <div class="m-3"><img  style="box-shadow: 0 2px 5px black;" src="/img/historico.png" alt="grafico-comparacao"></div >
+      <p class="text-justify">
+        Dúvidas, reportar um bug ou deseja analisar o código fonte? Enviar o email (pode usar esse mesmo site &#128526;) para o desenvolvedor do site. Manda seu email para <em>cmtcardeal@outlook.com</em>. O código fonte da aplicação estará disponível <a href="https://github.com/IglanCardeal/app-envio-email" target="_blank" style="text-decoration: none;">neste link do github</a>.
+      </p>
+      <a href="/home" class="btn btn-primary btn-entrar mt-5">
+        Voltar
+      </a>
+    </div>
+
+  </div>
+
+  <%- include('./includes/footer.ejs') %>

@@ -1,0 +1,64 @@
+  <%- include('./includes/head.ejs') %>
+
+  </head>
+  <body>
+    <div id="main-div" class="container col-12 col-sm-10 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+      
+      <%- include('./includes/nav.ejs') %>
+
+      <div class="login-form text-white">
+        <h2 class="text-center">
+          Enviar email
+        </h2>
+        <h3 class="text-danger text-center py-3">
+          <%= error %>
+        </h3>
+        <form
+          action="/sendemail"
+          method="POST"
+          id="textFormArea"
+        >
+          <div class="form-group">
+            <label for="exampleInputEmail1">Destino:</label>
+            <input
+              type="email"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="ex: 123abc@gmail.com"
+              name="destiny"
+              value="<%= destiny %>"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Assunto:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputEmail1"
+              placeholder="ex: Email de teste do projeto de redes computadores II"
+              name="subject"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Mensagem:</label>
+            <textarea class="form-control" form="textFormArea" rows="10" 
+            placeholder="Escreva algo para enviar" name="message"><%=message%></textarea>
+          </div>
+          <div class="custom-control custom-radio py-3">
+            <label>Enviar pelo protocolo: </label>
+            <div class="radio">
+              <label><input type="radio" name="protocol" value="HTTP" checked>&nbsp;HTTP (padrao)</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="protocol" value="SMTP">&nbsp;SMTP</label>
+            </div>
+          </div>
+          <%- include('./includes/_csrf.ejs') %>
+          <button type="submit" class="btn btn-primary btn-entrar">
+            Enviar
+          </button>
+        </form>
+      </div>
+
+      <%- include('./includes/footer.ejs') %>
