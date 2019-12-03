@@ -120,6 +120,16 @@ module.exports = {
   postSendEmail: async (req, res, next) => {
     const { destiny, subject, message } = req.body;
     const protocol = req.body.protocol || "HTTP";
+    if (protocol !== "HTTP" && protocol !== "SMTP") {
+      return res.render("home", {
+        pageTitle: "Login",
+        isLogged: req.session.isLogged,
+        error: "Protocolo submetido invalido! Tente novamente.",
+        path: "inicio",
+        destiny,
+        message
+      });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render("home", {
@@ -277,7 +287,7 @@ module.exports = {
       let historic = 0;
       while (historic < 1000000) {
         Math.random();
-        historic++
+        historic++;
       }
       res.status(200).json({ message: "Fim teste de estresse!", historic });
     } catch (error) {
