@@ -1,4 +1,3 @@
-global.Promise = require("bluebird");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const sendGrid = require("nodemailer-sendgrid-transport");
@@ -272,12 +271,14 @@ module.exports = {
 
   testeStress: async (req, res) => {
     try {
-      // const historic =  await Historic.find();
-      const historic = 0;
-      while (historic < 1000000) {
-        Math.random();
-        historic++;
-      }
+      const historic = await Historic.find().exec(); // para teste carga baixa
+
+      //   // para teste de carga alta
+      // let historic = 0;
+      // while (historic < 1000000) {
+      //   Math.random();
+      //   historic++;
+      // }
       res.status(200).json({ message: "Fim teste de estresse!", historic });
     } catch (error) {
       res.status(500).json({ message: "Teste de estresse falhou!" });
