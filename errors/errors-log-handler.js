@@ -4,7 +4,7 @@ const fs = Promise.promisifyAll(require("fs"));
 const { format, transports } = winston;
 
 // Tratamento para gerar arquivos de logs de erros nao tratados.
-exports.generateLogErrors = (error, filepath, status = 500) => {
+module.exports = (error, filepath, status = 500) => {
   const logConfiguration = {
     format: format.combine(format.simple()),
     transports: [
@@ -22,7 +22,7 @@ exports.generateLogErrors = (error, filepath, status = 500) => {
   logger.info(
     `\n================================= BEGIN =============================================`
   );
-  logger.info(`Date: ${new Date().toISOString()}`);
+  logger.info(`Date: ${new Date()}`);
   logger.error("Status: " + status, "\n");
   logger.error("Error: ", error, "\n");
   logger.info(

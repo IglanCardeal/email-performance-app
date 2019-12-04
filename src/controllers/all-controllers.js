@@ -221,6 +221,8 @@ module.exports = {
 
   historico: async (req, res, next) => {
     try {
+      let smtpQty = 0;
+      let httpQty = 0;
       const historico = await Historic.find().exec();
       const arrayOfTimeHttp = historico
         .filter(h => {
@@ -232,32 +234,19 @@ module.exports = {
           return h.protocol === "SMTP" && h.state === "success";
         })
         .map(h => h.time);
-      const smtp = historico.filter(h => {
-        return h.protocol === "SMTP" && h.state === "success";
-      });
-      const http = historico.filter(h => {
-        return h.protocol === "HTTP" && h.state === "success";
-      });
-      let smtpQty = 0;
-      let httpQty = 0;
-      smtp.forEach(h => {
-        if (h.state === "failed" || h.state === "waiting") smtpQty--;
+      arrayOfTimeSmtp.forEach(h => {
         smtpQty += 1;
       });
-      http.forEach(h => {
-        if (h.state === "failed" || h.state === "waiting") httpQty--;
+      arrayOfTimeHttp.forEach(h => {
         httpQty += 1;
       });
-      let tempoMedioSmtp =
-        smtp.reduce((acc, actual) => {
-          return acc + actual.time;
-        }, 0) / 1000;
-      let tempoMedioHttp =
-        http.reduce((acc, actual) => {
-          return acc + actual.time;
-        }, 0) / 1000;
-      tempoMedioSmtp = (tempoMedioSmtp / smtpQty || 0).toFixed(3);
-      tempoMedioHttp = (tempoMedioHttp / httpQty || 0).toFixed(3);
+      const totalTempo = (acc, actual) => {
+        return acc + actual;
+      };
+      const tempoTotalSmtp = arrayOfTimeSmtp.reduce(totalTempo, 0);
+      const tempoTotalHttp = arrayOfTimeHttp.reduce(totalTempo, 0);
+      const tempoMedioSmtp = (tempoTotalSmtp / smtpQty).toFixed(0);
+      const tempoMedioHttp = (tempoTotalHttp / httpQty || 0).toFixed(0);
       res.render("historico", {
         pageTitle: "Historico de envio",
         historico: historico,
@@ -283,8 +272,8 @@ module.exports = {
 
   testeStress: async (req, res) => {
     try {
-      // let historic =  await Historic.find();
-      let historic = 0;
+      // const historic =  await Historic.find();
+      const historic = 0;
       while (historic < 1000000) {
         Math.random();
         historic++;
