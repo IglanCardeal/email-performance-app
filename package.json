@@ -14,10 +14,11 @@
     "mongoose": "^5.7.12",
     "nodemailer": "^6.3.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "pm2": "^4.2.0",
     "winston": "^3.2.1"
   },
   "scripts": {
-    "production": "NODE_ENV=production node server.js",
+    "production": "NODE_ENV=production pm2 start server.js -i 0",
     "start": "NODE_ENV=development nodemon server.js"
   },
   "name": "app-envio-emails",

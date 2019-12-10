@@ -1,34 +1,16 @@
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sendGrid = require("nodemailer-sendgrid-transport");
-const { validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator");
 const dotenv = require("dotenv");
 
 const User = require("../model/users");
 const Historic = require("../model/historic");
 
-dotenv.config();
+const htmlBodyEmail = require("../resource/email-body");
 
-const htmlBodyEmail = content =>
-  `
-<div style="text-align: center; text-shadow: 0 1px 1px black;">
-<h1 style="color: rgb(9, 112, 172); font-size: 2rem; margin-top: 50px;">
-  Projeto Redes de Computadores II
-</h1>
-<h2>
-  Email enviado pelo site do projeto
-</h2>
-<p style="padding: 50px; font-size: 1.2rem; text-align: center;">
-  ${content}
-</p>
-<p
-  style="padding: 15px; margin-top: 100px; font-size: 1.2rem; color: crimson;"
->
-  Este email foi gerado automaticamente para testes de envio. <br>Favor nao
-  responder a este email &#128516;
-</p>
-</div>
-`;
+dotenv.config();
 
 const transport = nodemailer.createTransport(
   sendGrid({
@@ -45,6 +27,23 @@ const transportOverSMTP = nodemailer.createTransport({
     pass: process.env.SENDGRID_PASSWORD
   }
 });
+
+const renderHomeFunction = (
+  req,
+  res,
+  error = null,
+  destiny = null,
+  message = null
+) => {
+  return res.render("home", {
+    pageTitle: "Enviar",
+    path: "inicio",
+    isLogged: req.session.isLogged,
+    error: error,
+    destiny: destiny,
+    message: message
+  });
+};
 
 module.exports = {
   login: (req, res, next) => {
@@ -120,25 +119,23 @@ module.exports = {
     const { destiny, subject, message } = req.body;
     const protocol = req.body.protocol || "HTTP";
     if (protocol !== "HTTP" && protocol !== "SMTP") {
-      return res.render("home", {
-        pageTitle: "Login",
-        isLogged: req.session.isLogged,
-        error: "Protocolo submetido invalido! Tente novamente.",
-        path: "inicio",
+      return renderHomeFunction(
+        req,
+        res,
+        "Protocolo submetido invalido! Tente novamente.",
         destiny,
         message
-      });
+      );
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.render("home", {
-        pageTitle: "Login",
-        isLogged: req.session.isLogged,
-        error: errors.array()[0].msg,
-        path: "inicio",
+      return renderHomeFunction(
+        req,
+        res,
+        errors.array()[0].msg,
         destiny,
         message
-      });
+      );
     }
     const dataAtualFormatada = () => {
       let data = new Date(),
@@ -271,15 +268,23 @@ module.exports = {
 
   testeStress: async (req, res) => {
     try {
-      const historic = await Historic.find().exec(); // para teste carga baixa
+      // const historic = await Historic.find().exec(); // para teste carga baixa
 
-      //   // para teste de carga alta
+      // para teste de carga alta
       // let historic = 0;
       // while (historic < 1000000) {
       //   Math.random();
       //   historic++;
       // }
-      res.status(200).json({ message: "Fim teste de estresse!", historic });
+
+      crypto.pbkdf2("a", "b", 100000, 512, "sha512", (error, hash) => {
+        res.status(200).json({
+          message: "Fim teste de estresse!",
+          hash: hash.toString("hex")
+        });
+      });
+
+      // res.status(200).json({ message: "Fim teste de estresse!", historic });
     } catch (error) {
       res.status(500).json({ message: "Teste de estresse falhou!" });
     }
