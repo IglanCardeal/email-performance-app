@@ -172,35 +172,22 @@ module.exports = {
         newHist.state = "success";
         await newHist.save();
       };
+      const sendEmailObject = {
+        to: destiny,
+        from: process.env.APP_EMAIL,
+        subject:
+          subject || "Email de teste do projeto de redes de computadores II",
+        html: htmlBodyEmail(message)
+      };
       if (protocol === "HTTP") {
-        transport.sendMail(
-          {
-            to: destiny,
-            from: process.env.APP_EMAIL,
-            subject:
-              subject ||
-              "Email de teste do projeto de redes de computadores II",
-            html: htmlBodyEmail(message)
-          },
-          function(error, info) {
-            return callback(error, info, "HTTP");
-          }
-        );
+        transport.sendMail(sendEmailObject, function(error, info) {
+          return callback(error, info, "HTTP");
+        });
       }
       if (protocol === "SMTP") {
-        transportOverSMTP.sendMail(
-          {
-            to: destiny,
-            from: process.env.APP_EMAIL,
-            subject:
-              subject ||
-              "Email de teste do projeto de redes de computadores II",
-            html: htmlBodyEmail(message)
-          },
-          function(error, info) {
-            return callback(error, info, "SMTP");
-          }
-        );
+        transportOverSMTP.sendMail(sendEmailObject, function(error, info) {
+          return callback(error, info, "SMTP");
+        });
       }
     } catch (error) {
       next(error);
@@ -241,7 +228,7 @@ module.exports = {
       };
       const tempoTotalSmtp = arrayOfTimeSmtp.reduce(totalTempo, 0);
       const tempoTotalHttp = arrayOfTimeHttp.reduce(totalTempo, 0);
-      const tempoMedioSmtp = (tempoTotalSmtp / smtpQty).toFixed(0);
+      const tempoMedioSmtp = (tempoTotalSmtp / smtpQty || 0).toFixed(0);
       const tempoMedioHttp = (tempoTotalHttp / httpQty || 0).toFixed(0);
       res.render("historico", {
         pageTitle: "Historico de envio",
