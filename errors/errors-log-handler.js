@@ -1,5 +1,5 @@
-const winston = require("winston");
-const fs = Promise.promisifyAll(require("fs"));
+const winston = require('winston');
+const fs = Promise.promisifyAll(require('fs'));
 
 const { format, transports } = winston;
 
@@ -9,23 +9,23 @@ module.exports = (error, filepath, status = 500) => {
     format: format.combine(format.simple()),
     transports: [
       new transports.Console({
-        format: format.combine(format.colorize({ all: true }), format.simple())
+        format: format.combine(format.colorize({ all: true }), format.simple()),
       }),
       new transports.Stream({
-        stream: fs.createWriteStream(filepath, { flags: "a" })
-      })
-    ]
+        stream: fs.createWriteStream(filepath, { flags: 'a' }),
+      }),
+    ],
   };
 
   const logger = winston.createLogger(logConfiguration);
 
   logger.info(
-    `\n================================= BEGIN =============================================`
+    '\n================================= BEGIN =============================================',
   );
   logger.info(`Date: ${new Date()}`);
-  logger.error("Status: " + status, "\n");
-  logger.error("Error: ", error, "\n");
+  logger.error(`Status: ${status}`, '\n');
+  logger.error('Error: ', error, '\n');
   logger.info(
-    `\n================================== END ==============================================\n`
+    '\n================================== END ==============================================\n',
   );
 };

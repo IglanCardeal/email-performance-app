@@ -1,6 +1,5 @@
 global.Promise = require('bluebird');
 const { join } = require('path');
-
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
@@ -8,6 +7,7 @@ const csurf = require('csurf');
 const session = require('express-session');
 
 const allRoutes = require('./src/routes/all-routes');
+
 const serverErrorHandler = require('./errors/server-error-handler');
 
 const sessionObject = require('./config/session-config');
