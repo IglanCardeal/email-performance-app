@@ -1,5 +1,4 @@
-module.exports = content =>
-  `
+module.exports = (content) => `
 <div style="text-align: center; text-shadow: 0 1px 1px black;">
 <h1 style="color: rgb(9, 112, 172); font-size: 2rem; margin-top: 50px;">
 Projeto Redes de Computadores II

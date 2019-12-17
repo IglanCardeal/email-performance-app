@@ -44,10 +44,12 @@
     </div>
 
     <% if (historico.length > 0) { %>
+      <script src="/js/d3.v5.min.js" charset="utf-8"></script>
+      <script src="/js/c3.min.js"></script>
       <h3 class="text-center text-white">Gráfico</h3>
       <div id="chart" class="bg-white"></div>
       <script>
-        var chart = c3.generate({
+        const chart = c3.generate({
           bindto: '#chart',
           data: {
             columns: [

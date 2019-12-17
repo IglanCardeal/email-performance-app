@@ -1,31 +1,31 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
 const Historic = new Schema({
   data: {
     type: String,
-    required: true
+    required: true,
   },
   destino: {
     type: String,
-    required: true
+    required: true,
   },
   state: {
     type: String,
     required: false,
-    default: "waiting"
+    default: 'waiting',
   },
   time: {
     type: Number,
     required: false,
-    default: 0
+    default: 0,
   },
   protocol: {
     type: String,
     required: false,
-    default: "HTTP"
-  }
+    default: 'HTTP',
+  },
 });
 
-module.exports = mongoose.model("historic", Historic);
+module.exports = mongoose.model('historic', Historic);
