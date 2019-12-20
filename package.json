@@ -28,12 +28,11 @@
   "author": "Iglan Cardeal <cmtcardeal@outlook.com>",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^1.19.4",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.7.2",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1"
+    "eslint-config-airbnb-base": "^14.0.0",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.19.1"
   }
 }

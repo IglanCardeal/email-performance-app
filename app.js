@@ -1,4 +1,5 @@
 global.Promise = require('bluebird');
+
 const { join } = require('path');
 const express = require('express');
 const helmet = require('helmet');

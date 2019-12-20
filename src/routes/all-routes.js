@@ -20,7 +20,7 @@ router.post(
   [
     check(
       'user',
-      'Seu nome de usuario deve conter somente caracteres alfanumericos!'
+      'Seu nome de usuario deve conter somente caracteres alfanumericos!',
     )
       .isAlpha()
       .trim(),
@@ -28,7 +28,7 @@ router.post(
       min: 6,
     }),
   ],
-  loginController.postLogin
+  loginController.postLogin,
 );
 
 router.post('/logout', loginController.postLogout);
@@ -46,7 +46,7 @@ router.post(
     }),
   ],
   checkSession,
-  loginController.postSendEmail
+  loginController.postSendEmail,
 );
 
 router.get('/resultado', checkSession, loginController.resultado);
