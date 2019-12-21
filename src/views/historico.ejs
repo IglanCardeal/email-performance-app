@@ -4,7 +4,7 @@
 <body>
     <div id="main-div" class="container col-12 col-sm-10 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
     <%- include('./includes/nav.ejs') %>
-    
+
     <div class="text-center text-white py-5">
       <h1>Historico de envio</h1>
       <% if (historico.length < 1) { %>
@@ -46,8 +46,13 @@
     <% if (historico.length > 0) { %>
       <script src="/js/d3.v5.min.js" charset="utf-8"></script>
       <script src="/js/c3.min.js"></script>
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
       <h3 class="text-center text-white">Gráfico</h3>
       <div id="chart" class="bg-white"></div>
+      <div id="smtp" class="bg-white"></div>
+      <div id="http" class="bg-white"></div>
+      <div id="box-smtp" class="bg-white"></div>
+      <div id="box-http" class="bg-white"></div>
       <script>
         const chart = c3.generate({
           bindto: '#chart',
@@ -72,8 +77,61 @@
             }
           }
         });
+
+        const x1 = [<%= arrayOfTimeSmtp  %>];
+        const x2 = [<%= arrayOfTimeHttp %>];
+
+        const SMTP = {
+          x: x1,
+          type: "histogram",
+          name: 'SMTP',
+          opacity: 0.5,
+          marker: {
+            color: 'blue',
+          },
+        };
+
+        const HTTP = {
+          x: x2,
+          type: "histogram",
+          name: 'HTTP',
+          opacity: 0.6,
+          marker: {
+            color: 'darkorange',
+          },
+        };
+
+        const layout = {
+          barmode: "overlay",
+          xaxis: {title: "Tempo em milisegundos"},
+          yaxis: {title: "Quantidade emails"}
+        };
+
+        Plotly.newPlot('smtp', [SMTP], layout);
+        Plotly.newPlot('http', [HTTP], layout);
+
+        const SMTPBox = {
+          y: x1,
+          type: 'box',
+          marker: {
+            color: 'blue',
+          },
+          name: 'SMTP'
+        };
+
+        const HTTPBox = {
+          y: x2,
+          type: 'box',
+          marker: {
+            color: 'darkorange',
+          },
+          name: 'HTTP'
+        };
+
+        Plotly.newPlot('box-smtp', [SMTPBox]);
+        Plotly.newPlot('box-http', [HTTPBox]);
       </script>
     <% } %>
-  </div> 
+  </div>
 
   <%- include('./includes/footer.ejs') %>
