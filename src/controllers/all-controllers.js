@@ -64,7 +64,7 @@ module.exports = {
         const hashedPass = await bcrypt.hash(password, 12);
         const admin = new User({ user, password: hashedPass });
         await admin.save();
-        res.render('login', {
+        return res.render('login', {
           pageTitle: 'Login',
           isLogged: req.session.isLogged,
           error:
@@ -75,7 +75,7 @@ module.exports = {
       const comparePass = await bcrypt.compare(password, hasAdmin.password);
 
       if (!comparePass) {
-        res.render('login', {
+        return res.render('login', {
           pageTitle: 'Login',
           isLogged: req.session.isLogged,
           error: 'Nome de usuário ou senha incorretos! Tente novamente.',

@@ -1,12 +1,10 @@
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const dotenv = require('dotenv');
 
-dotenv.config();
+const url = require('./get-mongo-url');
 
-const uri = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 const store = new MongoDBStore({
-  uri,
+  url,
   collection: 'sessoes',
 });
 

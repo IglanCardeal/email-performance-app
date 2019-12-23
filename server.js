@@ -1,13 +1,13 @@
 const dotenv = require('dotenv');
-const databaseConnection = require('./config/database-connection');
+const databaseConnection = require('./src/config/database-connection');
 
-const app = require('./app');
+const app = require('./src/app');
 
 dotenv.config();
 
 try {
   databaseConnection(() => {
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, process.env.HOST, () => {
       console.log(`APP running on PORT: ${process.env.PORT}`);
       console.log(`Ambiente de execucao: ${process.env.NODE_ENV}`);
     });

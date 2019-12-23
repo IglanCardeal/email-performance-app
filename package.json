@@ -18,7 +18,7 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "production": "NODE_ENV=production pm2 start server.js -i 0",
+    "production": "NODE_ENV=production pm2-runtime process.yml",
     "start": "NODE_ENV=development nodemon server.js"
   },
   "name": "app-envio-emails",
@@ -32,6 +32,8 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "nodemon": "^1.19.4",
     "prettier": "^1.19.1"
   }
