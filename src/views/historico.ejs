@@ -3,6 +3,24 @@
   h3 {
     margin: 30px 0 10px 0;
   }
+
+  .pagination {
+    margin: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .pagination a {
+    text-decoration: none;
+    padding: 0.5rem;
+    margin: 0 1rem;
+  }
+
+  .pagination a:hover,
+  .pagination a:active,
+  .pagination a.active {
+    color: white;
+  }
 </style>
 
 </head>
@@ -17,7 +35,7 @@
           Nenhum email enviado no momento!
         </h3>
       <% } else { %>
-        <ol class="px-3">
+        <ul class="px-3">
           <% historico.forEach(h => { %>
             <li class="p-3">
               Data envio: <%= h.data %> <br>
@@ -35,7 +53,30 @@
               Tempo decorrido: <%= h.time %> milisegundos
             </li>
           <% }); %>
-        </ol>
+        </ul>
+
+        <!-- ================ paginacao ================ -->
+        <section class="pagination">
+          <% if ( currentPage !== 1 && previousPage !== 1 ) { %>
+            <a href="<%= path %>?page=1">Primeira Pagina</a>
+          <% } %>
+
+          <% if ( hasPreviousPage ) {%>
+            <a href="?page=<%= previousPage %>"><%= previousPage %></a>
+          <% } %>
+
+          <a href="?page=<%= currentPage %>" class="active"><%= currentPage %></a>
+
+          <% if ( hasNextPage ) {%>
+            <a href="?page=<%= nextPage %>"><%= nextPage %></a>
+          <% } %>
+
+          <% if ( lastPage !== currentPage && lastPage !== nextPage ) {%>
+            <a href="?page=<%= lastPage  %>">Ultima Pagina</a>
+          <% } %>
+        </section>
+        <!-- =========================================== -->
+
         <div class="py-3 border border-primary">
           <h4 class="p-2 text-success">Resultado de desempenho para cada protocolo</h4>
           <p class="p-1">

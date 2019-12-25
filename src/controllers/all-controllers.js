@@ -216,13 +216,24 @@ module.exports = {
       let smtpQty = 0;
       let httpQty = 0;
 
-      const historico = await Historic.find().exec();
+      const page = Math.floor(+req.query.page) || 1;
+      const ITEMS_PER_PAGE = 5;
 
-      const arrayOfTimeHttp = historico
+      const [totalItems, historico, todoHistorico] = await Promise.all([
+        Historic.find().countDocuments(),
+        Historic.find()
+          .sort({ data: -1 })
+          .skip((page - 1) * ITEMS_PER_PAGE)
+          .limit(ITEMS_PER_PAGE)
+          .exec(),
+        Historic.find(),
+      ]);
+
+      const arrayOfTimeHttp = todoHistorico
         .filter((h) => h.protocol === 'HTTP' && h.state === 'success')
         .map((h) => h.time);
 
-      const arrayOfTimeSmtp = historico
+      const arrayOfTimeSmtp = todoHistorico
         .filter((h) => h.protocol === 'SMTP' && h.state === 'success')
         .map((h) => h.time);
 
@@ -250,6 +261,12 @@ module.exports = {
         tempoMedioSmtp,
         arrayOfTimeHttp,
         arrayOfTimeSmtp,
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(+totalItems / +ITEMS_PER_PAGE),
       });
     } catch (error) {
       next(error);
