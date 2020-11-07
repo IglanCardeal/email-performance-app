@@ -63,7 +63,9 @@ module.exports = {
       if (!hasAdmin) {
         const hashedPass = await bcrypt.hash(password, 12);
         const admin = new User({ user, password: hashedPass });
+
         await admin.save();
+
         return res.render('login', {
           pageTitle: 'Login',
           isLogged: req.session.isLogged,
@@ -132,23 +134,6 @@ module.exports = {
       renderHomeFunction(req, res, errors.array()[0].msg, destiny, message);
     }
 
-    const dataAtualFormatada = () => {
-      const data = new Date();
-      const dia = data.getDate().toString();
-      const diaF = dia.length === 1 ? `0${dia}` : dia;
-      const mes = (data.getMonth() + 1).toString(); // +1 pois no getMonth Janeiro começa com zero.
-      const mesF = mes.length === 1 ? `0${mes}` : mes;
-      const anoF = data.getFullYear();
-      const hora = data.getHours();
-      // eslint-disable-next-line operator-linebreak
-      const min =
-        data.getMinutes().toString().length === 1
-          ? `0${data.getMinutes().toString()}`
-          : data.getMinutes().toString();
-
-      return `${diaF}/${mesF}/${anoF} as ${hora}:${min} horas`;
-    };
-
     const newHist = new Historic({
       data: dataAtualFormatada(),
       destino: destiny,
@@ -167,7 +152,9 @@ module.exports = {
         if (error) {
           newHist.state = 'failed';
           newHist.protocol = protocol;
+
           await newHist.save();
+
           throw error;
         }
 
@@ -283,25 +270,46 @@ module.exports = {
 
   testeStress: async (req, res) => {
     try {
+      /**
+       * Rota para teste de Stress de sistema
+       */
+
       // const historic = await Historic.find().exec(); // para teste carga baixa
 
       // para teste de carga alta
-      let historic = 0;
-      while (historic < 1000000) {
-        Math.random();
-        historic += historic;
-      }
+      // let historic = 0;
+      // while (historic < 1000000) {
+      //   Math.random();
+      //   historic += historic;
+      // }
 
-      // crypto.pbkdf2("a", "b", 100000, 512, "sha512", (error, hash) => {
-      //   res.status(200).json({
-      //     message: "Fim teste de estresse!",
-      //     hash: hash.toString("hex")
-      //   });
-      // });
+      crypto.pbkdf2('a', 'b', 100000, 512, 'sha512', (error, hash) => {
+        res.status(200).json({
+          message: 'Fim teste de estresse!',
+          hash: hash.toString('hex'),
+        });
+      });
 
       res.status(200).json({ message: 'Fim teste de estresse!', historic });
     } catch (error) {
       res.status(500).json({ message: 'Teste de estresse falhou!' });
     }
   },
+};
+
+const dataAtualFormatada = () => {
+  const data = new Date();
+  const dia = data.getDate().toString();
+  const diaF = dia.length === 1 ? `0${dia}` : dia;
+  const mes = (data.getMonth() + 1).toString(); // +1 pois no getMonth Janeiro começa com zero.
+  const mesF = mes.length === 1 ? `0${mes}` : mes;
+  const anoF = data.getFullYear();
+  const hora = data.getHours();
+  // eslint-disable-next-line operator-linebreak
+  const min =
+    data.getMinutes().toString().length === 1
+      ? `0${data.getMinutes().toString()}`
+      : data.getMinutes().toString();
+
+  return `${diaF}/${mesF}/${anoF} as ${hora}:${min} horas`;
 };

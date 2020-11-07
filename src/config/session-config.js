@@ -5,11 +5,17 @@ const url = require('./get-mongo-url');
 
 const store = new MongoDBStore({
   url,
+  databaseName: 'app-envio-email',
   collection: 'sessoes',
+
+}, (error) => {
+  if (error) console.log(error);
 });
 
+console.log('==================', url);
+
 module.exports = () => ({
-  name: 'projeto_redes2.sid',
+  name: 'session.sid',
   secret: ['78jfduu923bs1qpoiewa10xssd000212Wssadl9112'],
   resave: true,
   saveUninitialized: false,

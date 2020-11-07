@@ -12,6 +12,7 @@ module.exports = async (callback) => {
 
     return callback();
   } catch (error) {
+    console.log(error);
     throw new Error(
       'Error to connect database! Check mongodb url and/or port.',
     );

@@ -18,12 +18,12 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "production": "NODE_ENV=production pm2-runtime process.yml",
-    "start": "NODE_ENV=development nodemon server.js"
+    "start": "NODE_ENV=production pm2-runtime process.yml",
+    "dev": "NODE_ENV=development nodemon server.js"
   },
-  "name": "app-envio-emails",
-  "version": "0.1",
-  "description": "Site para envio de e-mails usando API SendGrid.",
+  "name": "app-envio-email",
+  "version": "1.0.0",
+  "description": "Site para demonstrar desempenho de envio de email usando protocolos HTTP e SMTP.",
   "main": "app.js",
   "author": "Iglan Cardeal <cmtcardeal@outlook.com>",
   "license": "MIT",
