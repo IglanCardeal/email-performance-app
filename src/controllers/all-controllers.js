@@ -60,8 +60,11 @@ module.exports = {
         .select('+password')
         .exec();
 
+      // Neste caso de nao haver nenhum admin cadastrado,
+      // sera criado um novo com os dados inseridos.
       if (!hasAdmin) {
         const hashedPass = await bcrypt.hash(password, 12);
+
         const admin = new User({ user, password: hashedPass });
 
         await admin.save();
@@ -116,7 +119,7 @@ module.exports = {
 
   postSendEmail: async (req, res, next) => {
     const { destiny, subject, message } = req.body;
-    const protocol = req.body.protocol || 'HTTP';
+    const protocol = req.body.protocol || 'HTTP'; // padrao HTTP
 
     if (protocol !== 'HTTP' && protocol !== 'SMTP') {
       renderHomeFunction(
@@ -146,6 +149,27 @@ module.exports = {
 
       res.redirect('resultado');
 
+      // toda operacao async a partir daqui
+      const sendEmailObject = {
+        to: destiny,
+        from: process.env.APP_EMAIL,
+        subject:
+          subject || 'Email de teste do aplicativo Email Performance App',
+        html: htmlBodyEmail(message),
+      };
+
+      if (protocol === 'HTTP') {
+        transport.sendMail(sendEmailObject, (error, info) => {
+          callback(error, info, 'HTTP');
+        });
+      }
+
+      if (protocol === 'SMTP') {
+        transportOverSMTP.sendMail(sendEmailObject, (error, info) => {
+          callback(error, info, 'SMTP');
+        });
+      }
+
       const callback = async (error, info, _protocol) => {
         newHist.protocol = _protocol;
 
@@ -165,26 +189,6 @@ module.exports = {
 
         await newHist.save();
       };
-
-      const sendEmailObject = {
-        to: destiny,
-        from: process.env.APP_EMAIL,
-        subject:
-          subject || 'Email de teste do projeto de redes de computadores II',
-        html: htmlBodyEmail(message),
-      };
-
-      if (protocol === 'HTTP') {
-        transport.sendMail(sendEmailObject, (error, info) => {
-          callback(error, info, 'HTTP');
-        });
-      }
-
-      if (protocol === 'SMTP') {
-        transportOverSMTP.sendMail(sendEmailObject, (error, info) => {
-          callback(error, info, 'SMTP');
-        });
-      }
     } catch (error) {
       next(error);
     }
@@ -204,7 +208,7 @@ module.exports = {
       let httpQty = 0;
 
       const page = Math.floor(+req.query.page) || 1;
-      const ITEMS_PER_PAGE = 5;
+      const ITEMS_PER_PAGE = 5; // 5 historicos por pagina
 
       const [totalItems, historico, todoHistorico] = await Promise.all([
         Historic.find().countDocuments(),
@@ -284,10 +288,10 @@ module.exports = {
       // }
 
       crypto.pbkdf2('a', 'b', 100000, 512, 'sha512', (error, hash) => {
-        res.status(200).json({
-          message: 'Fim teste de estresse!',
-          hash: hash.toString('hex'),
-        });
+        // res.status(200).json({
+        //   message: 'Fim teste de estresse!',
+        //   hash: hash.toString('hex'),
+        // });
       });
 
       res.status(200).json({ message: 'Fim teste de estresse!', historic });

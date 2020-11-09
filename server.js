@@ -11,6 +11,11 @@ try {
       console.log(`APP running on PORT: ${process.env.PORT}`);
       console.log(`URL: http://localhost:${process.env.PORT}`);
       console.log(`Ambiente de execucao: ${process.env.NODE_ENV}`);
+
+      if (process.env.NODE_ENV === 'production') {
+        console.log = () => { };
+      }
+
     });
   });
 } catch (error) {

@@ -1,18 +1,16 @@
-global.Promise = require('bluebird');
-
-const { join } = require('path');
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const csurf = require('csurf');
 const session = require('express-session');
+const { join } = require('path');
 
 const allRoutes = require('./routes/all-routes');
 
 const serverErrorHandler = require('./errors/server-error-handler');
 
-const sessionObject = require('./config/session-config');
-const checkCsrfToken = require('./config/check-csrf-token');
+const sessionObject = require('./middlewares/session-config');
+const checkCsrfToken = require('./middlewares/check-csrf-token');
 
 const app = express();
 

@@ -1,3 +1,10 @@
+# OBS:
+
+OUTLOOK NAO RECEBE EMAILs
+I’ve seen the same thing it looks like providers are blocking the IP range of SendGrid’s “free” plans.
+
+Assuming you authenticated your emails properly and followed SPF, dkim and DMARC then the only other solution is to upgrade your account to a dedicated IP and hope that range isn't blacklisted.
+
 <div align="center">
   <img src="./frontend/public/img/V.png" height="auto" width="160" alt="Velpac" />
 
@@ -125,3 +132,5 @@ Entre em contato! 👋🏽
 - cmtcardeal@outlook.com :email:
 - Instagram [@cmtcardeal](https://www.instagram.com/cmtecardeal/)
 - StackOverflow [Cmte Cardeal](https://pt.stackoverflow.com/users/95771/cmte-cardeal?tab=profile)
+
+

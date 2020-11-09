@@ -1,7 +1,7 @@
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
-const url = require('./get-mongo-url');
+const url = require('../config/get-mongo-url');
 
 const store = new MongoDBStore({
   url,
@@ -11,8 +11,6 @@ const store = new MongoDBStore({
 }, (error) => {
   if (error) console.log(error);
 });
-
-console.log('==================', url);
 
 module.exports = () => ({
   name: 'session.sid',
