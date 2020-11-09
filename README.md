@@ -1,14 +1,10 @@
-# OBS:
-
-OUTLOOK NAO RECEBE EMAILs
-I’ve seen the same thing it looks like providers are blocking the IP range of SendGrid’s “free” plans.
-
-Assuming you authenticated your emails properly and followed SPF, dkim and DMARC then the only other solution is to upgrade your account to a dedicated IP and hope that range isn't blacklisted.
-
 <div align="center">
-  <img src="./frontend/public/img/V.png" height="auto" width="160" alt="Velpac" />
 
-# App envio de email
+<kbd>
+  <img src="./src/public/img/email.png" height="auto" width="160" alt="Velpac" />
+</kbd>
+
+# Email Performance App
 
 <br>
 
@@ -18,7 +14,7 @@ Assuming you authenticated your emails properly and followed SPF, dkim and DMARC
 
 <div align="center">
 
-![version](https://img.shields.io/badge/version-1.0.0-green) ![npm](https://img.shields.io/npm/v/npm) ![node-current](https://img.shields.io/badge/nodejs-%3E%3D12.0.0-green) ![bootstrap](https://img.shields.io/badge/bootstrap-v4.0-blueviolet) ![GitHub](https://img.shields.io/github/license/iglancardeal/velpac)
+![version](https://img.shields.io/badge/version-1.0.0-green) ![npm](https://img.shields.io/npm/v/npm) ![node-current](https://img.shields.io/badge/nodejs-%3E%3D12.0.0-green) ![mongodb](https://img.shields.io/badge/mongodb-v4.0.5-darkgreen) ![mongoose](https://img.shields.io/badge/express-v4.17.1-yellow) ![bootstrap](https://img.shields.io/badge/bootstrap-v4.0-blueviolet) ![GitHub](https://img.shields.io/github/license/iglancardeal/velpac)
 
 </div>
 
@@ -28,44 +24,141 @@ Assuming you authenticated your emails properly and followed SPF, dkim and DMARC
 
 - Concluído :muscle:
 
-- [:computer: **Veja o site online aqui**](https://velpac.herokuapp.com/)
-
 ### Tabela de conteúdos
 
 <!--ts-->
 
 - [Sobre](#sobre)
-- [Onde está hospedada](#host)
+  - [Como é definido o protocolo de envio?](#protocolo-envio)
+- [Features](#features)
+- [Outlook nao recebe email](#outlook-issue)
 - [Como usar localmente](#como-usar)
   - [Pré Requisitos](#como-usar)
+    - [SendGrid](#sendgrid)
+    - [Configurando arquivo `.env`](#env)
+  - [Nao tenho mongodb instalado. E agora?🤔](#docker)
 - [Tecnologias](#tecnologias)
 - [Autor](#autor)
   <!--te-->
 
-#### Sobre :coffee:
-
 <p id="sobre"></p>
 
-![tela-inicial](./frontend/public/img/inicial.png)
+#### Sobre :coffee:
 
-Este site realiza a divulgação do projeto desenvolvido para gerenciar semáforos. Este projeto fez parte da avaliação de disciplina _Circuitos Elétricos_, onde foi usado uma aplicação feita usando NodeJS e Arduino para controlar, através de uma interface web, o tempo de um semáforo de uma avenida e uma faixa de pedestre.
-Neste site, foi demonstrado o propósito do projeto:
+![tela-inicial](./src/public/img/email-app-home.png)
 
-- o problema;
-- a solução demonstrada;
-- como funciona;
-- o esquemático do projeto no arduino;
-- a arquitetura de comunicação da **interface/servidor/arduino**;
-- os serviços oferecidos;
-- a documentação;
-- a equipe envolvida no projeto;
-- contato da empresa(pseudo contato) e da equipe(contato real dos integrantes);
+A idéia desde projeto surgiu durante a atividade final da desciplina de _Redes de Computadores II_, do curso de _Engenharia da Computação_, onde o projeto escolhido foi um servidor de envio de email, onde este servidor deve fornecer métricas de tempo de desempenho de envio de email baseado no tipo de protocolo enviado, no caso dois protocolos foram usados para enviar email, `SMTP`e `HTTP`.
 
-#### Onde está? :rocket:
+Este projeto consiste de uma aplicação web para envio de email baseando em protocolos de comunicação **HTTP** e **SMTP**. Além de pode escolher qual protocolo deseja enviar o email, este app possui um contador de tempo (em milisegundos) para que possa ser feita a análise de performance de cada protocolo durante o envio. Oferece o resultado de tempo médio de envio para cada protocolo e por fim, com base em todos os emails enviados, exibe gráfico para se ter uma comparação geral da performance.
 
-<p id="host"></p>
+Veja, logo abaixo, imagem do formulário de envio de email:
 
-Este site está hospedado na plataforma [Heroku](https://dashboard.heroku.com) de forma gratuita. A plataforma usa a branch `master` deste projeto para realizar o deploy da aplicação, ou seja, qualquer alteração nesta branch irá refletir na aplicação em produção.
+![tela-inicial](./src/public/img/send-email.png)
+
+<p id="#protocolo-envio"></p>
+
+##### Como é definido o protocolo de envio?
+
+Podemos escolher qual protocolo será usado no envio graças a biblioteca `nodemailer-sendgrid-transport`.
+Código que define o protocolo de envio:
+
+```javascript
+const dotenv = require('dotenv');
+const nodemailer = require('nodemailer');
+const sendGrid = require('nodemailer-sendgrid-transport');
+
+dotenv.config();
+
+// para protocolo HTTP
+exports.transport = nodemailer.createTransport(
+  sendGrid({
+    auth: {
+      api_key: process.env.SENDGRID_API_KEY,
+    },
+  }),
+);
+
+// para protocolo SMTP
+exports.transportOverSMTP = nodemailer.createTransport({
+  service: 'SendGrid',
+  auth: {
+    user: process.env.SENDGRID_USERNAME,
+    pass: process.env.SENDGRID_PASSWORD,
+  },
+});
+```
+
+E no `controller` da aplicação, verificamos o valor do input que escolhe o protocolo de envio, e assim fazemos o envio do email:
+
+```javascript
+if (protocol === 'HTTP') {
+  transport.sendMail(sendEmailObject, (error, info) => {
+    callback(error, info, 'HTTP');
+  });
+}
+
+if (protocol === 'SMTP') {
+  transportOverSMTP.sendMail(sendEmailObject, (error, info) => {
+    callback(error, info, 'SMTP');
+  });
+}
+```
+
+Este site foi feito com as tecnologias: MongoDB, NodeJS e, principalmente, faz o uso da API SendGrid através do Nodemailer para envio de emails sob os protocolos HTTP e SMTP. Os emails submetidos pelo usuário, são enviados ao servidor NodeJS e este armazena dados do email como protocolo, data de envio e protocolo usado, no banco de dados MongoDB antes de os enviar através da API do SendGrid.
+
+![esquema](./src/public/img/esquema.png)
+
+Veja mais sobre protocolo a ser usado com **SendGrid** e **Nodemailer**:
+
+- [Sending Email With Nodemailer and SendGrid](https://sendgrid.com/blog/sending-email-nodemailer-sendgrid/)
+
+<p id="features"></p>
+
+#### Features 📋
+
+Nesta aplicação voçê pode:
+
+- Enviar email escolhendo o protocolo a ser usado (`SMTP`/`HTTP`)
+
+- Visualizar o histórico de envio, onde é informado:
+  1. Data de envio
+  2. Email de destino(Destino)  
+  3. Protocolo usado no envio
+  4. Status do envio onde:
+
+      - <span style="color: yellow; text-shadow: 1px 1px 1px black">Pendente</span>:  Email foi entregue ao serviço do SendGrid, mas o mesmo ainda não foi entregue ao destinatário.
+
+      - <span style="color: green; text-shadow: 1px 1px 1px black">Enviado</span>: Email entregue ao destinatário.
+
+      - <span style="color: red; text-shadow: 1px 1px 1px black">Falha ao enviar</span>: Falhou ao enviar email.
+
+  5. Tempo decorrigo do procedimento em milisegundos
+
+   Exemplo de status de envio:
+
+  ```
+    Data envio: 09/11/2020 as 11:52 horas
+    Destino: cubeleexuzz@gmail.com
+    Protocolo: HTTP
+    Status: Pendente
+    Tempo decorrido: 0 milisegundos
+  ```
+
+- Visualizar os números de desempenho do tempo decorrido para cada protocolo. Os dados são exibidos em:
+
+  - Gráfico:
+
+    ![grafico](./src/public/img/grafico.png)
+
+  - Histograma:
+
+    ![histograma](./src/public/img/histograma.png)
+
+  - Diagrama de caixa:
+
+    ![caixa](./src/public/img/caixa.png)
+
+#### Problema com Outlook 👾
 
 #### Como usar localmente? :pushpin:
 
@@ -133,4 +226,9 @@ Entre em contato! 👋🏽
 - Instagram [@cmtcardeal](https://www.instagram.com/cmtecardeal/)
 - StackOverflow [Cmte Cardeal](https://pt.stackoverflow.com/users/95771/cmte-cardeal?tab=profile)
 
+#### OBS:
 
+OUTLOOK NAO RECEBE EMAILs
+I’ve seen the same thing it looks like providers are blocking the IP range of SendGrid’s “free” plans.
+
+Assuming you authenticated your emails properly and followed SPF, dkim and DMARC then the only other solution is to upgrade your account to a dedicated IP and hope that range isn't blacklisted.
