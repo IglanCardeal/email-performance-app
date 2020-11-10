@@ -31,11 +31,11 @@
 - [Sobre](#sobre)
   - [Como é definido o protocolo de envio?](#protocolo-envio)
 - [Features](#features)
-- [Outlook nao recebe email](#outlook-issue)
+- [Outlook não recebe email](#outlook-issue)
 - [Como usar localmente](#como-usar)
-  - [Pré Requisitos](#como-usar)
-    - [SendGrid](#sendgrid)
+  - [Requisitos](#como-usar)
     - [Configurando arquivo `.env`](#env)
+    - [SendGrid](#sendgrid)
   - [Nao tenho mongodb instalado. E agora?🤔](#atlas)
     - [Atlas](#atlas)
     - [Container Docker](#docker)
@@ -45,7 +45,7 @@
 
 <p id="sobre"></p>
 
-#### Sobre :coffee:
+### Sobre :coffee:
 
 ![tela-inicial](./src/public/img/email-app-home.png)
 
@@ -59,7 +59,7 @@ Veja, logo abaixo, imagem do formulário de envio de email:
 
 <p id="protocolo-envio"></p>
 
-##### Como é definido o protocolo de envio?
+#### Como é definido o protocolo de envio?
 
 Podemos escolher qual protocolo será usado no envio graças a biblioteca `nodemailer-sendgrid-transport`.
 Código que define o protocolo de envio:
@@ -116,7 +116,7 @@ Veja mais sobre protocolo a ser usado com **SendGrid** e **Nodemailer**:
 
 <p id="features"></p>
 
-#### Features 📋
+### Features 📋
 
 Nesta aplicação voçê pode:
 
@@ -163,7 +163,7 @@ Nesta aplicação voçê pode:
 
 <p id="outlook-issue"></p>
 
-#### Problema com Outlook 👾
+### Problema com Outlook 👾
 
 O envio de emails podem não funciona para destinatários com provedores Outloook/Hotmail. Pequisando sobre o erro, encontrei algumas informações [neste link](https://www.reddit.com/r/webdev/comments/amzfhg/outlookhotmail_blocking_my_sendgrid_emails/).
 
@@ -183,11 +183,11 @@ Em todos os testes feitos por mim, os email enviados para `*@gmail.com`, foram r
 
 <p id="como-usar"></p>
 
-#### Como usar localmente? :pushpin:
+### Como usar localmente? :pushpin:
 
 <p id="requisitos"></p>
 
-##### Requisitos
+#### Requisitos
 
 Para usar localmente em sua máquina, voce deve ter instalado em sua máquina o [NodeJS](https://nodejs.org/en/) com uma versão minima recomendada `v12.0.0`, [MongoDB](https://www.mongodb.com/) e o [Git](https://git-scm.com).
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/).
@@ -210,6 +210,8 @@ $ npm install
 # ou
 $ yarn install
 ```
+
+<p id="env"></p>
 
 Agora precisamos configurar o arquivo `.env`, que contém as variáveis de ambientes essenciais para executar a aplicação. Neste respositório, temos um arquivo de exemplo das variáveis de ambiente chamado `.env,example`. Abra esse arquivo e veremos o seguinte:
 
@@ -245,7 +247,7 @@ SENDGRID_PASSWORD= <sua senha do SendGrid>
 
 <p id="sendgrid"></p>
 
-##### SendGrid API Key
+#### SendGrid API Key
 
 Vamos ajustar o essencial. As chaves para uso da API do SendGrid são importantes para uso do serviço de envio de email.
 Voçê pode gerar uma chave de API no site [SendGrid](https://sendgrid.com/). Após realizar os cadastros e gerar a sua chave da API, faça os ajustes inserindo seus dados:
@@ -273,11 +275,11 @@ Agora abra seu navegador na URL `http://localhost:3000` e verá a página inicia
 
 <p id="atlas"></p>
 
-##### Não tem MongoDB instalado?
+#### Não tem MongoDB instalado?
 
 Sem problemas! 
 
-##### Atlas
+#### Atlas
 
 Voçê pode inserir uma URI de algum provedor como o [Atlas](https://www.mongodb.com/cloud/atlas/lp/try2?utm_source=google&utm_campaign=gs_americas_brazil_search_brand_atlas_desktop&utm_term=mongodb&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=1718986516). Neste caso, vamos definir um URI no em `DB_HOST_EXTERNAL=`. Esta variável tem prioridade, logo se voçê definiu uma URI, ela será usada, senão deixea vazia.
 A URI a ser usada, no caso se voçê usar o Atlas, terá o formato semelhante a seguir:
@@ -300,7 +302,7 @@ Tendo Feito todas as configurações, execute `npm run dev` ou `yarn dev` para i
 
 <p id="docker"></p>
 
-##### Voçê usa Docker? :whale:
+#### Voçê usa Docker? :whale:
 
 Uma solução alternativa é subir um container do Docker do MongoDB. Existe a [imagem oficial do mongo](https://hub.docker.com/_/mongo) que podemos usar para subir um container mongodb e usar o banco de dados.
 Na raíz do projeto temos um arquivo `docker-compose.yml` com as seguintes características:
@@ -355,7 +357,7 @@ Execute `make down` para desmontar o container.
 
 ***OBS***: Para a aplicação se conectar com o container do mongodb, a varável `DB_HOST_EXTERNAL` não pode estar definida.
 
-#### Quais tecnologias foram usadas? :wrench:
+### Quais tecnologias foram usadas? :wrench:
 
 <p id="tecnologias"></p>
 
