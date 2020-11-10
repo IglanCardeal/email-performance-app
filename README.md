@@ -14,7 +14,7 @@
 
 <div align="center">
 
-![version](https://img.shields.io/badge/version-1.0.0-green) ![npm](https://img.shields.io/npm/v/npm) ![node-current](https://img.shields.io/badge/nodejs-%3E%3D12.0.0-green) ![mongodb](https://img.shields.io/badge/mongodb-v4.0.5-darkgreen) ![mongoose](https://img.shields.io/badge/express-v4.17.1-yellow) ![bootstrap](https://img.shields.io/badge/bootstrap-v4.0-blueviolet) ![GitHub](https://img.shields.io/github/license/iglancardeal/velpac)
+![version](https://img.shields.io/badge/version-1.0.0-green) ![npm](https://img.shields.io/npm/v/npm) ![node-current](https://img.shields.io/badge/nodejs-%3E%3D12.0.0-green) ![mongodb](https://img.shields.io/badge/mongodb-v4.0.5-darkgreen) ![mongoose](https://img.shields.io/badge/express-v4.17.1-yellow) ![docker](https://img.shields.io/badge/docker-v19.03.13-blue) ![bootstrap](https://img.shields.io/badge/bootstrap-v4.0-blueviolet) ![GitHub](https://img.shields.io/github/license/iglancardeal/velpac)
 
 </div>
 
