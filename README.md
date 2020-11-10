@@ -57,7 +57,7 @@ Veja, logo abaixo, imagem do formulário de envio de email:
 
 ![tela-inicial](./src/public/img/send-email.png)
 
-<p id="#protocolo-envio"></p>
+<p id="protocolo-envio"></p>
 
 ##### Como é definido o protocolo de envio?
 
