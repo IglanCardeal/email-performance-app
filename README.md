@@ -372,7 +372,7 @@ Execute `make down` para desmontar o container.
 - [Git](https://git-scm.com)
 - [VSCode](https://code.visualstudio.com/)
 
-#### Autor
+### Autor
 
 <p id="autor"></p>
 
