@@ -10,7 +10,8 @@ const PORT = process.env.DB_PORT;
 const DBNAME = process.env.DB_NAME;
 // const USERNAME = process.env.DB_USERNAME;
 // const PASSWORD = process.env.DB_PASSWORD;
+const external_url = process.env.DB_HOST_EXTERNAL;
 
-const url = `mongodb://${HOST}:${PORT}/${DBNAME}`;
+const url = external_url ? external_url : `mongodb://${HOST}:${PORT}/${DBNAME}`;
 
 module.exports = url;

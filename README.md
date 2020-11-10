@@ -36,8 +36,10 @@
   - [Pré Requisitos](#como-usar)
     - [SendGrid](#sendgrid)
     - [Configurando arquivo `.env`](#env)
-  - [Nao tenho mongodb instalado. E agora?🤔](#docker)
-- [Tecnologias](#tecnologias)
+  - [Nao tenho mongodb instalado. E agora?🤔](#atlas)
+    - [Atlas](#atlas)
+    - [Container Docker](#docker)
+- [Tecnologias/ferramentas usadas](#tecnologias)
 - [Autor](#autor)
   <!--te-->
 
@@ -181,6 +183,10 @@ Em todos os testes feitos por mim, os email enviados para `*@gmail.com`, foram r
 
 #### Como usar localmente? :pushpin:
 
+<p id="requisitos"></p>
+
+##### Requisitos
+
 Para usar localmente em sua máquina, voce deve ter instalado em sua máquina o [NodeJS](https://nodejs.org/en/) com uma versão minima recomendada `v12.0.0`, [MongoDB](https://www.mongodb.com/) e o [Git](https://git-scm.com).
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/).
 Para começar, faça o clone deste repositório. Digite o comando no terminal:
@@ -223,6 +229,9 @@ DB_PORT=27017
 DB_DEV_HOST=127.0.0.1
 # Quando NODE_ENV=production
 DB_HOST=127.0.0.1
+# URL Provedor externo
+DB_HOST_EXTERNAL=
+
 
 # SendGrid account API key
 SENDGRID_API_KEY= <sua KEY do SendGrid>
@@ -230,10 +239,11 @@ SENDGRID_API_KEY= <sua KEY do SendGrid>
 # SendGrid accounts
 SENDGRID_USERNAME= <seu usuario do SendGrid>
 SENDGRID_PASSWORD= <sua senha do SendGrid>
-
 ```
 
-<p id="como-usar"></p>
+<p id="sendgrid"></p>
+
+##### SendGrid API Key
 
 Vamos ajustar o essencial. As chaves para uso da API do SendGrid são importantes para uso do serviço de envio de email.
 Voçê pode gerar uma chave de API no site [SendGrid](https://sendgrid.com/). Após realizar os cadastros e gerar a sua chave da API, faça os ajustes inserindo seus dados:
@@ -244,6 +254,8 @@ SENDGRID_API_KEY= <sua KEY do SendGrid>
 SENDGRID_USERNAME= <seu usuario do SendGrid>
 SENDGRID_PASSWORD= <sua senha do SendGrid>
 ```
+
+<p id="env"></p>
 
 Agora, renomeie o arquivo `.env.example` para `.env`.
 
@@ -257,6 +269,90 @@ $ yarn dev
 
 Agora abra seu navegador na URL `http://localhost:3000` e verá a página inicial do projeto.
 
+<p id="atlas"></p>
+
+##### Não tem MongoDB instalado?
+
+Sem problemas! 
+
+##### Atlas
+
+Voçê pode inserir uma URI de algum provedor como o [Atlas](https://www.mongodb.com/cloud/atlas/lp/try2?utm_source=google&utm_campaign=gs_americas_brazil_search_brand_atlas_desktop&utm_term=mongodb&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=1718986516). Neste caso, vamos definir um URI no em `DB_HOST_EXTERNAL=`. Esta variável tem prioridade, logo se voçê definiu uma URI, ela será usada, senão deixea vazia.
+A URI a ser usada, no caso se voçê usar o Atlas, terá o formato semelhante a seguir:
+
+```bash
+DB_HOST_EXTERNAL=mongodb+srv://<username>:<password>@cluster0.zcr3z.mongodb.net/<dbname>?retryWrites=true&w=majority
+```
+
+Onde:
+
+- `username`: seu nome de usuário
+
+- `password`: sua senha
+
+- `dbname`: nome da base de dados. Eu recomendo chamar de `email-performance-app`
+
+Tendo Feito todas as configurações, execute `npm run dev` ou `yarn dev` para iniciar a aplicação.
+
+**_OBS_**: ao executar o comando para iniciar a aplicação, será exibido no terminal a URI de conexão com o banco.
+
+<p id="docker"></p>
+
+##### Voçê usa Docker? :whale:
+
+Uma solução alternativa é subir um container do Docker do MongoDB. Existe a [imagem oficial do mongo](https://hub.docker.com/_/mongo) que podemos usar para subir um container mongodb e usar o banco de dados.
+Na raíz do projeto temos um arquivo `docker-compose.yml` com as seguintes características:
+
+```bash
+version: '3'
+services:
+  mongo:
+    container_name: db_app-envio-email
+    image: mongo
+    restart: always
+    ports:
+      - ${DB_PORT}:27017
+```
+
+Esse arquivo é a base para gerar um container do mongodb.
+Temos também um arquivo `Makefile` para que possamos executar comandos do `docker-compose` de uma maneira mais rápida.
+Características do `Makefile`:
+
+```bash
+include .env
+
+.PHONY: up
+
+up:
+  docker-compose up -d
+
+.PHONY: down
+
+down:
+  docker-compose down
+
+.PHONY: logs
+
+logs:
+  docker-compose logs -f
+```
+
+- `include .env` carrega as variáveis de ambiente do arquivo `.env`.
+
+- `up` executa o `docker-compose` com os containers em background
+
+- `logs` exibe os logs
+
+- `down` desmonta os containers
+
+Para subir o container, digite no terminal `make up`, e aguarde o docker baixar e montar a imagem do mongodb.
+
+Ao finalizar, execute `make logs`, para verificar se tudo ocorreu bem nos logs.
+
+Execute `make down` para desmontar o container.
+
+***OBS***: Para a aplicação se conectar com o container do mongodb, a varável `DB_HOST_EXTERNAL` não pode estar definida.
+
 #### Quais tecnologias foram usadas? :wrench:
 
 <p id="tecnologias"></p>
@@ -264,7 +360,10 @@ Agora abra seu navegador na URL `http://localhost:3000` e verá a página inicia
 - [NodeJS](https://nodejs.org/en/)
 - [Express](https://expressjs.com/pt-br/) (Framework web)
 - [Ejs](https://ejs.co/) (Template engine)
-- [Lazyload](https://www.npmjs.com/package/lazyload) (Otimizar carregamento de imagens)
+- [SendGrid](https://sendgrid.com)
+- [MongoDB](https://www.mongodb.com/)
+- [Docker](https://www.docker.com/)
+- [PM2](https://pm2.keymetrics.io/) (Para clusterização em produção)
 - [Bootstrap](https://getbootstrap.com/) (Framework CSS)
 - [Git](https://git-scm.com)
 - [VSCode](https://code.visualstudio.com/)
@@ -273,23 +372,16 @@ Agora abra seu navegador na URL `http://localhost:3000` e verá a página inicia
 
 <p id="autor"></p>
 
-<a href="https://blog.rocketseat.com.br/author/thiago/">
+<kbd>
  <img style="border-radius: 50%;" src="https://avatars1.githubusercontent.com/u/37749943?s=460&u=70f3bf022f3a0f28c332b1aa984510910818ef02&v=4" width="100px;" alt="iglan cardeal"/>
+</kbd>
 
 <b>Iglan Cardeal</b>
-</a>
 
-Desenvolvido e mantido por Iglan Cardeal :hammer:
+Desenvolvido e mantido por Iglan Cardeal :hammer: </br>
 Desenvolvedor NodeJS 💻 <br>
 Entre em contato! 👋🏽
 
 - cmtcardeal@outlook.com :email:
 - Instagram [@cmtcardeal](https://www.instagram.com/cmtecardeal/)
 - StackOverflow [Cmte Cardeal](https://pt.stackoverflow.com/users/95771/cmte-cardeal?tab=profile)
-
-#### OBS:
-
-OUTLOOK NAO RECEBE EMAILs
-I’ve seen the same thing it looks like providers are blocking the IP range of SendGrid’s “free” plans.
-
-Assuming you authenticated your emails properly and followed SPF, dkim and DMARC then the only other solution is to upgrade your account to a dedicated IP and hope that range isn't blacklisted.
