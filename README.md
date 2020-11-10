@@ -121,22 +121,23 @@ Nesta aplicação voçê pode:
 - Enviar email escolhendo o protocolo a ser usado (`SMTP`/`HTTP`)
 
 - Visualizar o histórico de envio, onde é informado:
+
   1. Data de envio
-  2. Email de destino(Destino)  
+  2. Email de destino(Destino)
   3. Protocolo usado no envio
   4. Status do envio onde:
 
-      - <span style="color: yellow; text-shadow: 1px 1px 1px black">Pendente</span>:  Email foi entregue ao serviço do SendGrid, mas o mesmo ainda não foi entregue ao destinatário.
+     - <span style="color: yellow; text-shadow: 1px 1px 1px black">Pendente</span>: Email foi entregue ao serviço do SendGrid, mas o mesmo ainda não foi entregue ao destinatário.
 
-      - <span style="color: green; text-shadow: 1px 1px 1px black">Enviado</span>: Email entregue ao destinatário.
+     - <span style="color: green; text-shadow: 1px 1px 1px black">Enviado</span>: Email entregue ao destinatário.
 
-      - <span style="color: red; text-shadow: 1px 1px 1px black">Falha ao enviar</span>: Falhou ao enviar email.
+     - <span style="color: red; text-shadow: 1px 1px 1px black">Falha ao enviar</span>: Falhou ao enviar email.
 
   5. Tempo decorrigo do procedimento em milisegundos
 
-   Exemplo de status de envio:
+  Exemplo de status de envio:
 
-  ```
+  ```bash
     Data envio: 09/11/2020 as 11:52 horas
     Destino: cubeleexuzz@gmail.com
     Protocolo: HTTP
@@ -144,7 +145,7 @@ Nesta aplicação voçê pode:
     Tempo decorrido: 0 milisegundos
   ```
 
-- Visualizar os números de desempenho do tempo decorrido para cada protocolo. Os dados são exibidos em:
+- Visualizar os números de desempenho do tempo decorrido para cada protocolo. Os dados são exibidos para comparação em:
 
   - Gráfico:
 
@@ -160,22 +161,38 @@ Nesta aplicação voçê pode:
 
 #### Problema com Outlook 👾
 
-#### Como usar localmente? :pushpin:
+O envio de emails podem não funciona para destinatários com provedores Outloook/Hotmail. Pequisando sobre o erro, encontrei algumas informações [neste link](https://www.reddit.com/r/webdev/comments/amzfhg/outlookhotmail_blocking_my_sendgrid_emails/).
+
+> I’ve seen the same thing it looks like providers are blocking the IP range of SendGrid’s “free” plans.Assuming you authenticated your emails properly and followed SPF, dkim and DMARC then the only other solution is to upgrade your account to a dedicated IP and hope that range isn't blacklisted.
+
+Basicamente o que é dito:
+
+> ALguns provedores estão bloqueando os IP's do planos gratuitos do SendGrid. A solução seria mudar para o plano pago para obter um IP dedicado e este IP não está na lista de IP's bloqueados dos provedores.
+
+Ou pode ser necessário ajustar a autenticação de dominio no site do SendGrid.
+
+> You have to do this: https://sendgrid.com/docs/ui/account-and-settings/how-to-set-up-domain-authentication/
+
+Para não ter todo o trabalho de ter que configurar ou mudar de plano, é <b>ALTAMENTE RECOMENDADO QUE OS DESTINATÁRIOS SEJAM EMAILS PROVIDOS PELO SERVIÇO DO GOOGLE, OU SEJA, USE DESTINATÁRIOS `@gmail.com`</b>, assim os email serão recebidos e não serão bloqueados pelo provedor.
+
+Em todos os testes feitos por mim, os email enviados para `*@gmail.com`, foram recebidos.
 
 <p id="como-usar"></p>
 
-Para usar localmente em sua máquina, voce deve ter instalado em sua máquina o [NodeJS](https://nodejs.org/en/) com uma versão minima recomendada `v12.0.0` e o [Git](https://git-scm.com).
+#### Como usar localmente? :pushpin:
+
+Para usar localmente em sua máquina, voce deve ter instalado em sua máquina o [NodeJS](https://nodejs.org/en/) com uma versão minima recomendada `v12.0.0`, [MongoDB](https://www.mongodb.com/) e o [Git](https://git-scm.com).
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/).
 Para começar, faça o clone deste repositório. Digite o comando no terminal:
 
 ```bash
-$ git clone https://github.com/IglanCardeal/velpac
+$ git clone https://github.com/IglanCardeal/performance-email-app
 ```
 
 Acesse a pasta do projeto:
 
 ```bash
-$ cd velpac
+$ cd performance-email-app
 ```
 
 Instale as dependências do projeto usando o `npm` ou `yarn` se preferir:
@@ -185,6 +202,50 @@ $ npm install
 # ou
 $ yarn install
 ```
+
+Agora precisamos configurar o arquivo `.env`, que contém as variáveis de ambientes essenciais para executar a aplicação. Neste respositório, temos um arquivo de exemplo das variáveis de ambiente chamado `.env,example`. Abra esse arquivo e veremos o seguinte:
+
+```bash
+# APP detalhes
+APP_NAME= App Envio de Email
+APP_AUTHOR= Iglan Cardeal
+APP_EMAIL= emailperformanceapp@teste.com
+
+# APP Port
+PORT= 3000
+HOST= localhost
+
+# Database MongoDB
+DB_NAME=app-envio-email
+DB_PORT=27017
+
+# Quando NODE_ENV=development
+DB_DEV_HOST=127.0.0.1
+# Quando NODE_ENV=production
+DB_HOST=127.0.0.1
+
+# SendGrid account API key
+SENDGRID_API_KEY= <sua KEY do SendGrid>
+
+# SendGrid accounts
+SENDGRID_USERNAME= <seu usuario do SendGrid>
+SENDGRID_PASSWORD= <sua senha do SendGrid>
+
+```
+
+<p id="como-usar"></p>
+
+Vamos ajustar o essencial. As chaves para uso da API do SendGrid são importantes para uso do serviço de envio de email.
+Voçê pode gerar uma chave de API no site [SendGrid](https://sendgrid.com/). Após realizar os cadastros e gerar a sua chave da API, faça os ajustes inserindo seus dados:
+
+```bash
+SENDGRID_API_KEY= <sua KEY do SendGrid>
+
+SENDGRID_USERNAME= <seu usuario do SendGrid>
+SENDGRID_PASSWORD= <sua senha do SendGrid>
+```
+
+Agora, renomeie o arquivo `.env.example` para `.env`.
 
 Feito isso, execute o comando abaixo e o aplicativo será iniciado localmente como ambiente de desenvolvimento em sua máquina:
 

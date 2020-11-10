@@ -152,7 +152,12 @@ module.exports = {
       // toda operacao async a partir daqui
       const sendEmailObject = {
         to: destiny,
-        from: process.env.APP_EMAIL,
+        // from: process.env.APP_EMAIL,
+        from:  {
+          name: 'Email Performance App',
+          address: process.env.APP_EMAIL,
+      },
+       
         subject:
           subject || 'Email de teste do aplicativo Email Performance App',
         html: htmlBodyEmail(message),
