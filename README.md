@@ -161,6 +161,8 @@ Nesta aplicação voçê pode:
 
     ![caixa](./src/public/img/caixa.png)
 
+<p id="outlook-issue"></p>
+
 #### Problema com Outlook 👾
 
 O envio de emails podem não funciona para destinatários com provedores Outloook/Hotmail. Pequisando sobre o erro, encontrei algumas informações [neste link](https://www.reddit.com/r/webdev/comments/amzfhg/outlookhotmail_blocking_my_sendgrid_emails/).
